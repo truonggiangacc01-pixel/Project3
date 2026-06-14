@@ -1,0 +1,53 @@
+package com.horseracing.project3.dto.request;
+
+import com.horseracing.project3.enums.TournamentStatus;
+
+import java.time.LocalDate;
+
+public class UpdateTournamentRequestDto {
+    private String name;
+    private String location;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private TournamentStatus status;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public TournamentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TournamentStatus status) {
+        this.status = status;
+    }
+}
