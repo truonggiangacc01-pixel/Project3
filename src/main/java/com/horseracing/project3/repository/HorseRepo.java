@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface HorseRepo extends JpaRepository<Horse, Integer> {
     List<Horse> findByHorseOwner_Email(String email);
+    List<Horse> findByNameContainingIgnoreCaseOrBreedContainingIgnoreCase(String name, String breed);
     boolean existsByName(String name);
 }

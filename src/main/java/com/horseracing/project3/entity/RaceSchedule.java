@@ -26,6 +26,9 @@ public class RaceSchedule {
     @Column(name = "location", columnDefinition = "NVARCHAR(100)", nullable = false)
     private String location;
 
+    @Column(name = "delay_reason", columnDefinition = "NVARCHAR(MAX)")
+    private String delayReason;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status",nullable = false)
     private RaceScheduleStatus status;
@@ -50,6 +53,18 @@ public class RaceSchedule {
 
     public void setTournament(Tournament tournament) {
         this.tournament = tournament;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "RaceTrackId")
+    private RaceTrack raceTrack;
+
+    public RaceTrack getRaceTrack() {
+        return raceTrack;
+    }
+
+    public void setRaceTrack(RaceTrack raceTrack) {
+        this.raceTrack = raceTrack;
     }
 
     /*___________________________________________________________________________________________________________ */
@@ -150,6 +165,14 @@ public class RaceSchedule {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getDelayReason() {
+        return delayReason;
+    }
+
+    public void setDelayReason(String delayReason) {
+        this.delayReason = delayReason;
     }
 
     public RaceScheduleStatus getStatus() {

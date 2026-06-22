@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface RaceScheduleRepo extends JpaRepository<RaceSchedule, Integer> {
+    List<RaceSchedule> findByTournamentIdOrderByStartTimeAsc(Integer tournamentId);
 
     @Query("SELECT COUNT(rs) FROM RaceSchedule rs JOIN rs.raceParticipationList rp " +
            "WHERE rp.jockey.id = :jockeyId " +

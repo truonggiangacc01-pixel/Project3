@@ -90,6 +90,10 @@ public class RaceResult {
     /*___________________________________________________________________________________________________________ */
     //                                                  GETTER, SETTER
 
+    public Integer getId() {
+        return id;
+    }
+
     public Integer getRankPosition() {
         return rankPosition;
     }
