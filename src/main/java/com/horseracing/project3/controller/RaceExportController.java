@@ -1,6 +1,7 @@
 package com.horseracing.project3.controller;
 
 import com.horseracing.project3.dto.request.UseCaseRequestDtos.ExportRaceDataRequest;
+import com.horseracing.project3.dto.response.ApiResponse;
 import com.horseracing.project3.service.RaceUseCaseService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,9 @@ public class RaceExportController {
                                             @RequestParam(required = false, defaultValue = "all") String dataType,
                                             @RequestParam(required = false, defaultValue = "csv") String format) {
         try {
-            return ResponseEntity.ok(raceUseCaseService.exportRaceData(tournamentId, new ExportRaceDataRequest(dataType, format)));
+            return ResponseEntity.ok(new ApiResponse<>(true, "Race data exported", raceUseCaseService.exportRaceData(tournamentId, new ExportRaceDataRequest(dataType, format))));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
         }
     }
 }

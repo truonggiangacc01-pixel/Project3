@@ -1,6 +1,8 @@
 package com.horseracing.project3.controller;
 
 import com.horseracing.project3.dto.request.UseCaseRequestDtos.RaceTrackRequest;
+import com.horseracing.project3.dto.response.ApiResponse;
+import com.horseracing.project3.dto.response.UseCaseResponseDtos.RaceTrackResponse;
 import com.horseracing.project3.service.RaceUseCaseService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +21,16 @@ public class RaceTrackController {
 
     @GetMapping
     public ResponseEntity<?> getRaceTracks() {
-        return ResponseEntity.ok(raceUseCaseService.getRaceTracks());
+        return ResponseEntity.ok(new ApiResponse<>(true, "Race tracks loaded", raceUseCaseService.getRaceTracks().stream().map(RaceTrackResponse::from).toList()));
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> createRaceTrack(@RequestBody RaceTrackRequest request) {
         try {
-            return ResponseEntity.ok(raceUseCaseService.createRaceTrack(request));
+            return ResponseEntity.ok(new ApiResponse<>(true, "Race track created", RaceTrackResponse.from(raceUseCaseService.createRaceTrack(request))));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
         }
     }
 
@@ -36,9 +38,9 @@ public class RaceTrackController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> updateRaceTrack(@PathVariable Integer trackId, @RequestBody RaceTrackRequest request) {
         try {
-            return ResponseEntity.ok(raceUseCaseService.updateRaceTrack(trackId, request));
+            return ResponseEntity.ok(new ApiResponse<>(true, "Race track updated", RaceTrackResponse.from(raceUseCaseService.updateRaceTrack(trackId, request))));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
         }
     }
 }

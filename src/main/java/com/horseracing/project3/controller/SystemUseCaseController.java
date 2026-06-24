@@ -1,6 +1,9 @@
 package com.horseracing.project3.controller;
 
 import com.horseracing.project3.dto.request.UseCaseRequestDtos.SendNotificationRequest;
+import com.horseracing.project3.dto.response.ApiResponse;
+import com.horseracing.project3.dto.response.UseCaseResponseDtos.NotificationResponse;
+import com.horseracing.project3.dto.response.UseCaseResponseDtos.RankingEntryResponse;
 import com.horseracing.project3.service.RaceUseCaseService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +24,9 @@ public class SystemUseCaseController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> closeDuePredictions() {
         try {
-            return ResponseEntity.ok(raceUseCaseService.closeDuePredictions());
+            return ResponseEntity.ok(new ApiResponse<>(true, "Due predictions closed", raceUseCaseService.closeDuePredictions()));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
         }
     }
 
@@ -31,9 +34,9 @@ public class SystemUseCaseController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> sendNotification(@RequestBody SendNotificationRequest request) {
         try {
-            return ResponseEntity.ok(raceUseCaseService.sendNotification(request));
+            return ResponseEntity.ok(new ApiResponse<>(true, "Notification sent", NotificationResponse.from(raceUseCaseService.sendNotification(request))));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
         }
     }
 
@@ -41,9 +44,9 @@ public class SystemUseCaseController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> updateRankingTable(@RequestParam Integer tournamentId) {
         try {
-            return ResponseEntity.ok(raceUseCaseService.updateRankingTable(tournamentId));
+            return ResponseEntity.ok(new ApiResponse<>(true, "Ranking table updated", raceUseCaseService.updateRankingTable(tournamentId).stream().map(RankingEntryResponse::from).toList()));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
         }
     }
 }

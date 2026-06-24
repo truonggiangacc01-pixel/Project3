@@ -1,7 +1,7 @@
 package com.horseracing.project3.config;
 
 import com.horseracing.project3.entity.*;
-import com.horseracing.project3.enums.RaceScheduleStatus;
+import com.horseracing.project3.enums.*;
 import com.horseracing.project3.enums.UserRole;
 import com.horseracing.project3.enums.HorseHealthStatus;
 import com.horseracing.project3.repository.*;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +59,18 @@ public class DataInitializer implements CommandLineRunner {
     private JockeyRepo jockeyRepo;
     @Autowired
     private RaceRefereeRepo raceRefereeRepo;
+    @Autowired
+    private RaceTrackRepo raceTrackRepo;
+    @Autowired
+    private RaceParticipationRepo raceParticipationRepo;
+    @Autowired
+    private RaceResultRepo raceResultRepo;
+    @Autowired
+    private RankingEntryRepo rankingEntryRepo;
+    @Autowired
+    private PredictionRepo predictionRepo;
+    @Autowired
+    private NotificationRepo notificationRepo;
     @Autowired
     private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
@@ -372,5 +385,121 @@ public class DataInitializer implements CommandLineRunner {
 //            savedRaceSchedules.add(raceSchedule);
 //        }
 
+        RaceTrack track1 = new RaceTrack();
+        track1.setName("Phu Tho Main Track");
+        track1.setLocation("Truong dua Phu Tho");
+        track1.setSurfaceType("Turf");
+        track1.setLengthMeters(1800);
+        track1.setDescription("Main turf race track for national tournament");
+
+        RaceTrack track2 = new RaceTrack();
+        track2.setName("Dai Nam Sprint Track");
+        track2.setLocation("Truong dua Dai Nam");
+        track2.setSurfaceType("Dirt");
+        track2.setLengthMeters(1400);
+        track2.setDescription("Sprint race track for seasonal tournament");
+
+        raceTrackRepo.saveAll(List.of(track1, track2));
+
+        List<Tournament> tournaments = List.of(tour1, tour2, tour3, tour4, tour5, tour6, tour7);
+        List<Tournament> savedTournaments = new ArrayList<>();
+        for (Tournament tournament : tournaments) {
+            ad1.addTournament(tournament);
+            tournament.setStatus(TournamentStatus.ACTIVE);
+            tournament.setRegistrationOpen(true);
+            tournament.setRegistrationStartDate(LocalDateTime.now().minusDays(30));
+            tournament.setRegistrationEndDate(LocalDateTime.now().plusDays(30));
+            savedTournaments.add(tournamentService.saveTournament(tournament));
+        }
+
+        rasc1.setRaceTrack(track1);
+        rasc2.setRaceTrack(track1);
+        rasc3.setRaceTrack(track1);
+        rasc4.setRaceTrack(track2);
+        rasc5.setRaceTrack(track1);
+        rasc6.setRaceTrack(track2);
+        rasc7.setRaceTrack(track2);
+        rasc8.setRaceTrack(track1);
+        rasc9.setRaceTrack(track1);
+        rasc10.setRaceTrack(track1);
+
+        savedTournaments.get(0).addRaceSchedule(rasc1);
+        savedTournaments.get(0).addRaceSchedule(rasc2);
+        savedTournaments.get(0).addRaceSchedule(rasc3);
+        savedTournaments.get(1).addRaceSchedule(rasc4);
+        savedTournaments.get(2).addRaceSchedule(rasc5);
+        savedTournaments.get(3).addRaceSchedule(rasc6);
+        savedTournaments.get(4).addRaceSchedule(rasc7);
+        savedTournaments.get(5).addRaceSchedule(rasc8);
+        savedTournaments.get(5).addRaceSchedule(rasc9);
+        savedTournaments.get(5).addRaceSchedule(rasc10);
+
+        List<RaceSchedule> raceSchedules = List.of(rasc1, rasc2, rasc3, rasc4, rasc5, rasc6, rasc7, rasc8, rasc9, rasc10);
+        for (RaceSchedule raceSchedule : raceSchedules) {
+            raceScheduleService.saveRaceSchedule(raceSchedule);
+        }
+
+        RaceParticipation rp1 = createParticipation(rasc1, savedHorses.get(0), jockeys.get(0), 1);
+        RaceParticipation rp2 = createParticipation(rasc1, savedHorses.get(1), jockeys.get(1), 2);
+        RaceParticipation rp3 = createParticipation(rasc1, savedHorses.get(2), jockeys.get(2), 3);
+        RaceParticipation rp4 = createParticipation(rasc2, savedHorses.get(3), jockeys.get(3), 1);
+        RaceParticipation rp5 = createParticipation(rasc2, savedHorses.get(4), jockeys.get(4), 2);
+        RaceParticipation rp6 = createParticipation(rasc6, savedHorses.get(0), jockeys.get(5), 1);
+        RaceParticipation rp7 = createParticipation(rasc6, savedHorses.get(2), jockeys.get(6), 2);
+        raceParticipationRepo.saveAll(List.of(rp1, rp2, rp3, rp4, rp5, rp6, rp7));
+
+        raceResultRepo.saveAll(List.of(
+                createResult(rasc1, rp1, refs.get(0), 1, LocalTime.of(0, 1, 42)),
+                createResult(rasc1, rp2, refs.get(0), 2, LocalTime.of(0, 1, 46)),
+                createResult(rasc1, rp3, refs.get(0), 3, LocalTime.of(0, 1, 49)),
+                createResult(rasc2, rp5, refs.get(1), 1, LocalTime.of(0, 1, 39)),
+                createResult(rasc2, rp4, refs.get(1), 2, LocalTime.of(0, 1, 44))
+        ));
+
+        rankingEntryRepo.saveAll(List.of(
+                createRanking(savedTournaments.get(0), savedHorses.get(0), 10, 1),
+                createRanking(savedTournaments.get(0), savedHorses.get(4), 10, 2),
+                createRanking(savedTournaments.get(0), savedHorses.get(1), 7, 3),
+                createRanking(savedTournaments.get(0), savedHorses.get(3), 7, 4),
+                createRanking(savedTournaments.get(0), savedHorses.get(2), 5, 5)
+        ));
+
+        Prediction prediction = new Prediction(1, LocalDateTime.now().minusHours(2), PredictionStatus.OPEN);
+        prediction.setSpectator(spec1);
+        prediction.setRaceSchedule(rasc6);
+        prediction.setHorse(savedHorses.get(0));
+        predictionRepo.save(prediction);
+
+        Notification notification = new Notification("Demo notification for FE integration", LocalDateTime.now(), NotificationStatus.UNREAD);
+        notification.setHorseOwner(owners.get(0));
+        notificationRepo.save(notification);
+
+    }
+
+    private RaceParticipation createParticipation(RaceSchedule raceSchedule, Horse horse, Jockey jockey, Integer laneNumber) {
+        RaceParticipation participation = new RaceParticipation(RaceParticipationStatus.CONFIRMED, laneNumber);
+        participation.setRaceSchedule(raceSchedule);
+        participation.setHorse(horse);
+        participation.setJockey(jockey);
+        participation.setJockeyInvitationStatus(JockeyInvitationStatus.PENDING);
+        return participation;
+    }
+
+    private RaceResult createResult(RaceSchedule raceSchedule, RaceParticipation participation, RaceReferee referee, Integer rankPosition, LocalTime finishTime) {
+        RaceResult result = new RaceResult(rankPosition, finishTime, RaceResultStatus.PUBLISHED);
+        result.setRaceSchedule(raceSchedule);
+        result.setRaceParticipation(participation);
+        result.setRaceReferee(referee);
+        return result;
+    }
+
+    private RankingEntry createRanking(Tournament tournament, Horse horse, Integer points, Integer rankPosition) {
+        RankingEntry rankingEntry = new RankingEntry();
+        rankingEntry.setTournament(tournament);
+        rankingEntry.setHorse(horse);
+        rankingEntry.setPoints(points);
+        rankingEntry.setRankPosition(rankPosition);
+        rankingEntry.setUpdatedAt(LocalDateTime.now());
+        return rankingEntry;
     }
 }

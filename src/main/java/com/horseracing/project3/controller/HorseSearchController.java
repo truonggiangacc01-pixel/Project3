@@ -1,5 +1,7 @@
 package com.horseracing.project3.controller;
 
+import com.horseracing.project3.dto.response.ApiResponse;
+import com.horseracing.project3.dto.response.UseCaseResponseDtos.HorseSearchResponse;
 import com.horseracing.project3.service.RaceUseCaseService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ public class HorseSearchController {
 
     @GetMapping("/search")
     public ResponseEntity<?> searchHorseInformation(@RequestParam(required = false) String keyword) {
-        return ResponseEntity.ok(raceUseCaseService.searchHorseInformation(keyword));
+        var horses = raceUseCaseService.searchHorseInformation(keyword).stream().map(HorseSearchResponse::from).toList();
+        String message = horses.isEmpty() ? "No horse information found" : "Horse information loaded";
+        return ResponseEntity.ok(new ApiResponse<>(true, message, horses));
     }
 }

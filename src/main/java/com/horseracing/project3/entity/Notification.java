@@ -90,6 +90,10 @@ public class Notification {
     /*___________________________________________________________________________________________________________ */
     //                                                  GETTER, SETTER
 
+    public Integer getId() {
+        return id;
+    }
+
     public String getMessage() {
         return message;
     }
