@@ -15,6 +15,10 @@ public class Ticket {
     @Column(name = "id")
     private Integer id;
 
+    // BR-43: Mỗi vé phải có một mã định danh duy nhất trong toàn hệ thống
+    @Column(name = "ticket_code", unique = true, nullable = false)
+    private String ticketCode;
+
     @Column(name = "price", columnDefinition = "DECIMAL(15, 0)", nullable = false)
     private BigDecimal price;
 
@@ -81,6 +85,14 @@ public class Ticket {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getTicketCode() {
+        return ticketCode;
+    }
+
+    public void setTicketCode(String ticketCode) {
+        this.ticketCode = ticketCode;
     }
 
     public LocalDateTime getPurchaseDate() {

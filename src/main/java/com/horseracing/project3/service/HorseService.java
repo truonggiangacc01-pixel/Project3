@@ -79,4 +79,16 @@ public class HorseService {
     public List<Horse> getHorsesByOwner(String ownerEmail) {
         return horseRepo.findByHorseOwner_Email(ownerEmail);
     }
+
+    @Autowired
+    private com.horseracing.project3.repository.RaceResultRepo raceResultRepo;
+
+    public List<com.horseracing.project3.entity.RaceResult> getHorsePerformanceHistory(Integer horseId) {
+        if (!horseRepo.existsById(horseId)) {
+            throw new RuntimeException("Horse not found. The provided horse ID does not exist in the system.");
+        }
+        
+        // Return empty list if horse exists but has no races (Alternative Flow 1a)
+        return raceResultRepo.findByHorseId(horseId);
+    }
 }

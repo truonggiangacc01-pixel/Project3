@@ -30,6 +30,7 @@ public class RaceResult {
     //1, N RaceResult bất kỳ phải thuộc về 1 RaceParticipation
     @ManyToOne
     @JoinColumn(name = "RaceParticipationId")
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties("raceResultList")
     private RaceParticipation raceParticipation;
 
     public RaceParticipation getRaceParticipation() {
@@ -46,6 +47,7 @@ public class RaceResult {
     //1, N RaceResult bất kỳ phải thuộc về 1 RaceReferee
     @ManyToOne
     @JoinColumn(name = "RaceRefereeId")
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties("raceResultList")
     private RaceReferee raceReferee;
 
     public RaceReferee getRaceReferee() {
@@ -62,6 +64,7 @@ public class RaceResult {
     //1, N RaceResult bất kỳ phải thuộc về 1 RaceSchedule
     @ManyToOne
     @JoinColumn(name = "RaceScheduleId")
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"raceResultList", "raceParticipationList", "predictionList", "tournament"})
     private RaceSchedule raceSchedule;
 
     public RaceSchedule getRaceSchedule() {

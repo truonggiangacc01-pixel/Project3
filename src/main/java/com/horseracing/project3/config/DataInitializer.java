@@ -199,14 +199,14 @@ public class DataInitializer implements CommandLineRunner {
                 LocalDate.of(2026, 11, 10)
                 , TournamentStatus.ACTIVE, null,
                 LocalDateTime.of(2026, 11, 1, 7, 0, 0),
-                LocalDateTime.of(2026, 11, 4, 23, 0, 0), Boolean.FALSE);
+                LocalDateTime.of(2026, 11, 4, 23, 0, 0), Boolean.TRUE);
 
         Tournament tour6 = new Tournament("Giải Vô Địch Quốc Gia 2026", "Trường đua Phú Thọ",
                 LocalDate.of(2026, 12, 20),
                 LocalDate.of(2026, 12, 25)
                 , TournamentStatus.ACTIVE, null,
                 LocalDateTime.of(2026, 12, 10, 7, 0, 0),
-                LocalDateTime.of(2026, 12, 19, 23, 0, 0), Boolean.FALSE);
+                LocalDateTime.of(2026, 12, 19, 23, 0, 0), Boolean.TRUE);
 
         /*___________________________________________________________________________________________________________ */
         //                                                  RaceSchedule
@@ -275,22 +275,27 @@ public class DataInitializer implements CommandLineRunner {
         Ticket t1 = new Ticket(BigDecimal.valueOf(200000),
                 LocalDateTime.of(2025, 12, 16, 11, 45, 0),
                 TicketStatus.USED);
+        t1.setTicketCode(java.util.UUID.randomUUID().toString());
         
         Ticket t2 = new Ticket(BigDecimal.valueOf(200000),
                 LocalDateTime.of(2025, 12, 17, 11, 45, 0),
                 TicketStatus.USED);
+        t2.setTicketCode(java.util.UUID.randomUUID().toString());
         
         Ticket t3 = new Ticket(BigDecimal.valueOf(100000),
                 LocalDateTime.of(2026, 2, 1, 9, 0, 0),
                 TicketStatus.USED);
+        t3.setTicketCode(java.util.UUID.randomUUID().toString());
         
         Ticket t4 = new Ticket(BigDecimal.valueOf(100000),
                 LocalDateTime.of(2026, 2, 2, 9, 0, 0),
                 TicketStatus.CANCELLED);
+        t4.setTicketCode(java.util.UUID.randomUUID().toString());
         
         Ticket t5 = new Ticket(BigDecimal.valueOf(150000),
                 LocalDateTime.of(2026, 5, 12, 14, 30, 0),
                 TicketStatus.USED);
+        t5.setTicketCode(java.util.UUID.randomUUID().toString());
         
         /*___________________________________________________________________________________________________________ */
         //                                                  RaceParticipation
