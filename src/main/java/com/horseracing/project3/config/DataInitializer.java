@@ -92,9 +92,11 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
         /*___________________________________________________________________________________________________________ */
         //                                                  ADMIN
         Admin ad1 = new Admin("Nguyễn Trần Văn", "tranvan_admin", "tranavan.admin@duangua.vn", "0912345678", "ad123", LocalDate.of(1995, 10, 14));
+        
 
         /*___________________________________________________________________________________________________________ */
         //                                                  Spectator
@@ -107,7 +109,7 @@ public class DataInitializer implements CommandLineRunner {
         Spectator spec7 = new Spectator("Phan Quốc Bảo", "quocbao_88", "quocbao88@gmail.com", "0912345677", "spec123", LocalDate.of(2003, 8, 29));
         Spectator spec8 = new Spectator("Vũ Minh Hằng", "minhhang_vip", "minhhang_vip@gmail.com", "0912345678", "spec123", LocalDate.of(1999, 7, 3));
         Spectator spec9 = new Spectator("Trần Tiến Dũng", "trandung_win", "trandung_win@gmail.com", "0912345679", "spec123", LocalDate.of(1986, 2, 9));
-        Spectator spec10 = new Spectator("Lê Thị Lan", "lelan_smile", "lelan@gmail.com", "0912345680", "spec123", LocalDate.of(2005, 6, 30));
+        Spectator spec10= new Spectator("Lê Thị Lan", "lelan_smile", "lelan@gmail.com", "0912345680", "spec123", LocalDate.of(2005, 6, 30));
 
         /*___________________________________________________________________________________________________________ */
         //                                                  Horse Owner
@@ -140,120 +142,16 @@ public class DataInitializer implements CommandLineRunner {
         RaceReferee ref9 = new RaceReferee("Chu Uy Nghiêm", "IemCUN", "uynghiem.ref@mail.com", "0919990011", "RaRe123", LocalDate.of(1990, 9, 25), 4, "Quốc tế");
         RaceReferee ref10 = new RaceReferee("Lâm Quyết Đoán", "DoanLQĐ", "quyetdoan.ref@mail.com", "0911001122", "RaRe123", LocalDate.of(1991, 9, 25), 8, "Quốc tế");
 
-
         /*___________________________________________________________________________________________________________ */
-        //                                                  TOURNAMENT
-
-        Tournament tour1 = new Tournament("Giải Vô Địch Quốc Gia 2025", "Trường đua Phú Thọ", LocalDate.of(2025, 12, 20), LocalDate.of(2025, 12, 25));
-        Tournament tour2 = new Tournament("Giải Đua Ngựa Khai Xuân 2026", "Trường đua Đại Nam", LocalDate.of(2026, 2, 10), LocalDate.of(2026, 2, 15));
-        Tournament tour3 = new Tournament("Giải Đua Ngựa Đón Hè 2026", "Trường đua Phú Thọ", LocalDate.of(2026, 5, 15), LocalDate.of(2026, 5, 20));
-        Tournament tour4 = new Tournament("Giải Đua Ngựa Vượt Thu 2026", "Trường đua Sóc Sơn", LocalDate.of(2026, 8, 20), LocalDate.of(2026, 8, 25));
-        Tournament tour5 = new Tournament("Giải Đua Ngựa Chinh Đông 2026", "Trường đua Đại Nam", LocalDate.of(2026, 11, 5), LocalDate.of(2026, 11, 10));
-        Tournament tour6 = new Tournament("Giải Vô Địch Quốc Gia 2026", "Trường đua Phú Thọ", LocalDate.of(2026, 12, 20), LocalDate.of(2026, 12, 25));
-        Tournament tour7 = new Tournament("Giải Đua Ngựa Demo Trống 2027", "Trường đua Sóc Sơn", LocalDate.of(2027, 1, 10), LocalDate.of(2027, 1, 15));
-
-        /*___________________________________________________________________________________________________________ */
-        //                                                  RACE SCHEDULE
-
-        RaceSchedule rasc1 = new RaceSchedule(
-                "Bán kết Quốc gia 2025 lần 1",
-                LocalDate.of(2025, 12, 22),
-                "Trường đua Phú Thọ",
-                RaceScheduleStatus.COMPLETED,
-                LocalDateTime.of(2025, 12, 22, 15, 0, 0),
-                LocalDateTime.of(2025, 12, 22, 17, 0, 0)
-        );
-
-
-        RaceSchedule rasc2 = new RaceSchedule(
-                "Bán kết Quốc gia 2025 lần 2",
-                LocalDate.of(2025, 12, 23),
-                "Trường đua Phú Thọ",
-                RaceScheduleStatus.COMPLETED,
-                LocalDateTime.of(2025, 12, 23, 15, 0, 0),
-                LocalDateTime.of(2025, 12, 23, 17, 0, 0)
-        );
-
-
-        RaceSchedule rasc3 = new RaceSchedule(
-                "Chung kết Quốc gia 2025",
-                LocalDate.of(2025, 12, 24),
-                "Trường đua Phú Thọ",
-                RaceScheduleStatus.COMPLETED,
-                LocalDateTime.of(2025, 12, 24, 15, 0, 0),
-                LocalDateTime.of(2025, 12, 24, 17, 0, 0)
-        );
-
-
-        RaceSchedule rasc4 = new RaceSchedule(
-                "Chung kết Xuân 2026",
-                LocalDate.of(2026, 2, 14),
-                "Trường đua Đại Nam",
-                RaceScheduleStatus.COMPLETED,
-                LocalDateTime.of(2026, 2, 14, 15, 0, 0),
-                LocalDateTime.of(2026, 2, 14, 17, 0, 0)
-        );
-
-
-        RaceSchedule rasc5 = new RaceSchedule(
-                "Chung kết Hè 2026",
-                LocalDate.of(2026, 5, 19),
-                "Trường đua Phú Thọ",
-                RaceScheduleStatus.COMPLETED,
-                LocalDateTime.of(2026, 5, 19, 15, 0, 0),
-                LocalDateTime.of(2026, 5, 19, 17, 0, 0)
-        );
-
-
-        RaceSchedule rasc6 = new RaceSchedule(
-                "Chung kết Thu 2026",
-                LocalDate.of(2026, 8, 24),
-                "Trường đua Sóc Sơn",
-                RaceScheduleStatus.PENDING,
-                LocalDateTime.of(2026, 8, 24, 15, 0, 0),
-                LocalDateTime.of(2026, 8, 24, 17, 0, 0)
-        );
-
-
-        RaceSchedule rasc7 = new RaceSchedule(
-                "Chung kết Đông 2026",
-                LocalDate.of(2026, 11, 9),
-                "Trường đua Đại Nam",
-                RaceScheduleStatus.PENDING,
-                LocalDateTime.of(2026, 11, 9, 15, 0, 0),
-                LocalDateTime.of(2026, 11, 9, 17, 0, 0)
-        );
-
-
-        RaceSchedule rasc8 = new RaceSchedule(
-                "Bán kết Quốc gia 2026 lần 1",
-                LocalDate.of(2026, 12, 22),
-                "Trường đua Phú Thọ",
-                RaceScheduleStatus.PENDING,
-                LocalDateTime.of(2026, 12, 22, 15, 0, 0),
-                LocalDateTime.of(2026, 12, 22, 17, 0, 0)
-        );
-
-
-        RaceSchedule rasc9 = new RaceSchedule(
-                "Bán kết Quốc gia 2026 lần 2",
-                LocalDate.of(2026, 12, 23),
-                "Trường đua Phú Thọ",
-                RaceScheduleStatus.PENDING,
-                LocalDateTime.of(2026, 12, 23, 15, 0, 0),
-                LocalDateTime.of(2026, 12, 23, 17, 0, 0)
-        );
-
-
-        RaceSchedule rasc10 = new RaceSchedule(
-                "Chung kết Quốc gia 2026",
-                LocalDate.of(2026, 12, 24),
-                "Trường đua Phú Thọ",
-                RaceScheduleStatus.PENDING,
-                LocalDateTime.of(2026, 12, 24, 15, 0, 0),
-                LocalDateTime.of(2026, 12, 24, 17, 0, 0)
-        );
-
+        //                                                  HORSE
+        Horse h1 = new Horse("Bão Táp", 4, "Thoroughbred", HorseHealthStatus.ELIGIBLE);
+        Horse h2 = new Horse("Sấm Sét", 5, "Quarter Horse", HorseHealthStatus.ELIGIBLE);
+        Horse h3 = new Horse("Xích Thố", 3, "Arabian", HorseHealthStatus.ELIGIBLE);
+        Horse h4 = new Horse("Bạch Mã", 6, "Thoroughbred", HorseHealthStatus.ELIGIBLE); // Previously: Đang hồi phục
+        Horse h5 = new Horse("Phi Yến", 4, "Appaloosa", HorseHealthStatus.ELIGIBLE);
+        Horse h6 = new Horse("Hắc Ám", 5, "Thoroughbred", HorseHealthStatus.INJURED); // Previously: Chấn thương nhẹ
+        Horse h7 = new Horse("Tia Chớp", 3, "Quarter Horse", HorseHealthStatus.ELIGIBLE);
+        Horse h8 = new Horse("Đại Bàng", 7, "Arabian", HorseHealthStatus.ELIGIBLE);
 
         /*___________________________________________________________________________________________________________ */
         //                                                  PRIZE
@@ -267,239 +165,494 @@ public class DataInitializer implements CommandLineRunner {
         Prize p8 = new Prize("Giải Tám", BigDecimal.valueOf(375000000.00), 8);
 
         /*___________________________________________________________________________________________________________ */
-        //                                                  HORSE
-        Horse h1 = new Horse("Bão Táp", 4, "Thoroughbred", HorseHealthStatus.ELIGIBLE);
-        Horse h2 = new Horse("Sấm Sét", 5, "Quarter Horse", HorseHealthStatus.ELIGIBLE);
-        Horse h3 = new Horse("Xích Thố", 3, "Arabian", HorseHealthStatus.ELIGIBLE);
-        Horse h4 = new Horse("Bạch Mã", 6, "Thoroughbred", HorseHealthStatus.ELIGIBLE); // Previously: Đang hồi phục
-        Horse h5 = new Horse("Phi Yến", 4, "Appaloosa", HorseHealthStatus.ELIGIBLE);
-        Horse h6 = new Horse("Hắc Ám", 5, "Thoroughbred", HorseHealthStatus.INJURED); // Previously: Chấn thương nhẹ
-        Horse h7 = new Horse("Tia Chớp", 3, "Quarter Horse", HorseHealthStatus.ELIGIBLE);
-        Horse h8 = new Horse("Đại Bàng", 7, "Arabian", HorseHealthStatus.ELIGIBLE);
+        //                                                  TOURNAMENT
+        Tournament tour1 = new Tournament("Giải Vô Địch Quốc Gia 2025", "Trường đua Phú Thọ",
+                LocalDate.of(2025, 12, 20),
+                LocalDate.of(2025, 12, 25)
+                , TournamentStatus.COMPLETED, null,
+                LocalDateTime.of(2025, 12, 10, 7, 0, 0),
+                LocalDateTime.of(2025, 12, 19, 23, 0, 0), Boolean.FALSE);
 
+        Tournament tour2 = new Tournament("Giải Đua Ngựa Khai Xuân 2026", "Trường đua Đại Nam",
+                LocalDate.of(2026, 2, 10),
+                LocalDate.of(2026, 2, 15)
+                , TournamentStatus.COMPLETED, null,
+                LocalDateTime.of(2026, 2, 1, 7, 0, 0),
+                LocalDateTime.of(2026, 2, 9, 23, 0, 0), Boolean.FALSE);
 
-        // Hash passwords
-        java.util.List<Admin> admins = java.util.Arrays.asList(ad1);
+        Tournament tour3 = new Tournament("Giải Đua Ngựa Đón Hè 2026", "Trường đua Phú Thọ",
+                LocalDate.of(2026, 5, 15),
+                LocalDate.of(2026, 5, 20)
+                , TournamentStatus.COMPLETED, null,
+                LocalDateTime.of(2026, 5, 5, 7, 0, 0),
+                LocalDateTime.of(2026, 5, 14, 23, 0, 0), Boolean.FALSE);
+
+        Tournament tour4 = new Tournament("Giải Đua Ngựa Vượt Thu 2026", "Trường đua Sóc Sơn",
+                LocalDate.of(2026, 8, 20),
+                LocalDate.of(2026, 8, 25)
+                , TournamentStatus.ACTIVE, null,
+                LocalDateTime.of(2026, 8, 10, 7, 0, 0),
+                LocalDateTime.of(2026, 8, 19, 23, 0, 0), Boolean.FALSE);
+
+        Tournament tour5 = new Tournament("Giải Đua Ngựa Chinh Đông 2026", "Trường đua Đại Nam",
+                LocalDate.of(2026, 11, 5),
+                LocalDate.of(2026, 11, 10)
+                , TournamentStatus.ACTIVE, null,
+                LocalDateTime.of(2026, 11, 1, 7, 0, 0),
+                LocalDateTime.of(2026, 11, 4, 23, 0, 0), Boolean.FALSE);
+
+        Tournament tour6 = new Tournament("Giải Vô Địch Quốc Gia 2026", "Trường đua Phú Thọ",
+                LocalDate.of(2026, 12, 20),
+                LocalDate.of(2026, 12, 25)
+                , TournamentStatus.ACTIVE, null,
+                LocalDateTime.of(2026, 12, 10, 7, 0, 0),
+                LocalDateTime.of(2026, 12, 19, 23, 0, 0), Boolean.FALSE);
+
+        /*___________________________________________________________________________________________________________ */
+        //                                                  RaceSchedule
+        RaceSchedule rs1 = new RaceSchedule("Bán kết Quốc gia 2025 lần 1",
+                LocalDate.of(2025, 12, 22), "Trường đua Phú Thọ",
+                null, RaceScheduleStatus.COMPLETED,
+                LocalDateTime.of(2025, 12, 22, 15, 0, 0),
+                LocalDateTime.of(2025, 12, 22, 17, 0, 0));
+        
+        RaceSchedule rs2 = new RaceSchedule("Bán kết Quốc gia 2025 lần 2",
+                LocalDate.of(2025, 12, 23), "Trường đua Phú Thọ",
+                null, RaceScheduleStatus.COMPLETED,
+                LocalDateTime.of(2025, 12, 23, 15, 0, 0),
+                LocalDateTime.of(2025, 12, 23, 17, 0, 0));
+        
+        RaceSchedule rs3 = new RaceSchedule("Chung kết Quốc gia 2025",
+                LocalDate.of(2025, 12, 24), "Trường đua Phú Thọ",
+                null, RaceScheduleStatus.COMPLETED,
+                LocalDateTime.of(2025, 12, 24, 15, 0, 0),
+                LocalDateTime.of(2025, 12, 24, 17, 0, 0));
+        
+        RaceSchedule rs4 = new RaceSchedule("Chung kết Xuân 2026",
+                LocalDate.of(2026, 2, 14), "Trường đua Đại Nam",
+                null, RaceScheduleStatus.COMPLETED,
+                LocalDateTime.of(2026, 2, 14, 15, 0, 0),
+                LocalDateTime.of(2026, 2, 14, 17, 0, 0));
+        
+        RaceSchedule rs5 = new RaceSchedule("Chung kết Hè 2026",
+                LocalDate.of(2026, 5, 19), "Trường đua Phú Thọ",
+                null, RaceScheduleStatus.COMPLETED,
+                LocalDateTime.of(2026, 5, 19, 15, 0, 0),
+                LocalDateTime.of(2026, 5, 19, 17, 0, 0));
+        
+        RaceSchedule rs6 = new RaceSchedule("Chung kết Thu 2026",
+                LocalDate.of(2026, 8, 24), "Trường đua Sóc Sơn",
+                null, RaceScheduleStatus.PENDING,
+                LocalDateTime.of(2026, 8, 24, 15, 0, 0),
+                LocalDateTime.of(2026, 8, 24, 17, 0, 0));
+        
+        RaceSchedule rs7 = new RaceSchedule("Chung kết Đông 2026",
+                LocalDate.of(2026, 11, 9), "Trường đua Đại Nam",
+                null, RaceScheduleStatus.PENDING,
+                LocalDateTime.of(2026, 11, 9, 15, 0, 0),
+                LocalDateTime.of(2026, 11, 9, 17, 0, 0));
+        
+        RaceSchedule rs8 = new RaceSchedule("Bán kết Quốc gia 2026 lần 1",
+                LocalDate.of(2026, 12, 22), "Trường đua Phú Thọ",
+                null, RaceScheduleStatus.PENDING,
+                LocalDateTime.of(2026, 12, 22, 15, 0, 0),
+                LocalDateTime.of(2026, 12, 22, 17, 0, 0));
+        
+        RaceSchedule rs9 = new RaceSchedule("Bán kết Quốc gia 2026 lần 2",
+                LocalDate.of(2026, 12, 23), "Trường đua Phú Thọ",
+                null, RaceScheduleStatus.PENDING,
+                LocalDateTime.of(2026, 12, 23, 15, 0, 0),
+                LocalDateTime.of(2026, 12, 23, 17, 0, 0));
+        
+        RaceSchedule rs10 = new RaceSchedule("Chung kết Quốc gia 2026",
+                LocalDate.of(2026, 12, 24), "Trường đua Phú Thọ",
+                null, RaceScheduleStatus.PENDING,
+                LocalDateTime.of(2026, 12, 24, 15, 0, 0),
+                LocalDateTime.of(2026, 12, 24, 17, 0, 0));
+
+        /*___________________________________________________________________________________________________________ */
+        //                                                  Ticket
+        Ticket t1 = new Ticket(BigDecimal.valueOf(200000),
+                LocalDateTime.of(2025, 12, 16, 11, 45, 0),
+                TicketStatus.USED);
+        
+        Ticket t2 = new Ticket(BigDecimal.valueOf(200000),
+                LocalDateTime.of(2025, 12, 17, 11, 45, 0),
+                TicketStatus.USED);
+        
+        Ticket t3 = new Ticket(BigDecimal.valueOf(100000),
+                LocalDateTime.of(2026, 2, 1, 9, 0, 0),
+                TicketStatus.USED);
+        
+        Ticket t4 = new Ticket(BigDecimal.valueOf(100000),
+                LocalDateTime.of(2026, 2, 2, 9, 0, 0),
+                TicketStatus.CANCELLED);
+        
+        Ticket t5 = new Ticket(BigDecimal.valueOf(150000),
+                LocalDateTime.of(2026, 5, 12, 14, 30, 0),
+                TicketStatus.USED);
+        
+        /*___________________________________________________________________________________________________________ */
+        //                                                  RaceParticipation
+        RaceParticipation rp1 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 1);
+        RaceParticipation rp2 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 2);
+        RaceParticipation rp3 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 3);
+        RaceParticipation rp4 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 4);
+
+        RaceParticipation rp5 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 1);
+        RaceParticipation rp6 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 2);
+        RaceParticipation rp7 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 3);
+        RaceParticipation rp8 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 4);
+
+        RaceParticipation rp9 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 1);
+        RaceParticipation rp10 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 2);
+        RaceParticipation rp11 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 3);
+        RaceParticipation rp12 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 4);
+
+        RaceParticipation rp13 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 1);
+        RaceParticipation rp14 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 2);
+        RaceParticipation rp15 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 3);
+        RaceParticipation rp16 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 4);
+
+        RaceParticipation rp17 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 1);
+        RaceParticipation rp18 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 2);
+        RaceParticipation rp19 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 3);
+        RaceParticipation rp20 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 4);
+
+        RaceParticipation rp21 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 1);
+        RaceParticipation rp22 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 2);
+        RaceParticipation rp23 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 3);
+        RaceParticipation rp24 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 4);
+
+        RaceParticipation rp25 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 1);
+        RaceParticipation rp26 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 2);
+        RaceParticipation rp27 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 3);
+        RaceParticipation rp28 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 4);
+
+        RaceParticipation rp29 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 1);
+        RaceParticipation rp30 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 2);
+        RaceParticipation rp31 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 3);
+        RaceParticipation rp32 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 4);
+
+        RaceParticipation rp33 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 1);
+        RaceParticipation rp34 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 2);
+        RaceParticipation rp35 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 3);
+        RaceParticipation rp36 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 4);
+
+        /*___________________________________________________________________________________________________________ */
+        //                                                  RaceResult
+        RaceResult rr1 = new RaceResult(1, LocalTime.of(0, 4, 50, 120_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr2 = new RaceResult(2, LocalTime.of(0, 4, 50, 350_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr3 = new RaceResult(3, LocalTime.of(0, 4, 51, 140_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr4 = new RaceResult(4, LocalTime.of(0, 4, 55, 150_000_000), RaceResultStatus.OFFICIAL);
+
+        RaceResult rr5 = new RaceResult(4, LocalTime.of(0, 5, 55, 120_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr6 = new RaceResult(3, LocalTime.of(0, 5, 51, 140_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr7 = new RaceResult(2, LocalTime.of(0, 5, 50, 350_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr8 = new RaceResult(1, LocalTime.of(0, 5, 50, 120_000_000), RaceResultStatus.OFFICIAL);
+
+        RaceResult rr9 = new RaceResult(2, LocalTime.of(0, 6, 50, 350_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr10 = new RaceResult(3, LocalTime.of(0, 6, 51, 140_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr11 = new RaceResult(4, LocalTime.of(0, 6, 55, 120_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr12 = new RaceResult(1, LocalTime.of(0, 6, 50, 120_000_000), RaceResultStatus.OFFICIAL);
+
+        RaceResult rr13 = new RaceResult(3, LocalTime.of(0, 5, 51, 140_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr14 = new RaceResult(4, LocalTime.of(0, 5, 55, 120_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr15 = new RaceResult(1, LocalTime.of(0, 5, 50, 120_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr16 = new RaceResult(2, LocalTime.of(0, 5, 50, 350_000_000), RaceResultStatus.OFFICIAL);
+
+        RaceResult rr17 = new RaceResult(4, LocalTime.of(0, 6, 55, 120_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr18 = new RaceResult(1, LocalTime.of(0, 6, 50, 120_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr19 = new RaceResult(2, LocalTime.of(0, 6, 50, 350_000_000), RaceResultStatus.OFFICIAL);
+        RaceResult rr20 = new RaceResult(3, LocalTime.of(0, 6, 51, 140_000_000), RaceResultStatus.OFFICIAL);
+
+        RaceResult rr21 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        RaceResult rr22 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        RaceResult rr23 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        RaceResult rr24 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+
+        RaceResult rr25 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        RaceResult rr26 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        RaceResult rr27 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        RaceResult rr28 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+
+        RaceResult rr29 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        RaceResult rr30 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        RaceResult rr31 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        RaceResult rr32 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+
+        RaceResult rr33 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        RaceResult rr34 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        RaceResult rr35 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        RaceResult rr36 = new RaceResult(null, null, RaceResultStatus.UNOFFICIAL);
+        /*___________________________________________________________________________________________________________ */
+        //                                                  Prediction
+        Prediction pr1 = new Prediction(1, LocalDateTime.of(2025, 12, 16, 11, 45, 0), PredictionStatus.WON);
+        Prediction pr2 = new Prediction(2, LocalDateTime.of(2025, 12, 17, 11, 45, 0), PredictionStatus.LOST);
+        Prediction pr3 = new Prediction(3, LocalDateTime.of(2026, 2, 1, 9, 0, 0), PredictionStatus.WON);
+        Prediction pr4 = new Prediction(4, LocalDateTime.of(2026, 2, 2, 9, 0, 0), PredictionStatus.WON);
+        Prediction pr5 = new Prediction(5, LocalDateTime.of(2026, 5, 12, 14, 30, 0), PredictionStatus.WON);
+
+        /*___________________________________________________________________________________________________________ */
+        //                                                  Lưu save admin
+        List<Admin> admins = List.of(ad1);
         admins.forEach(u -> u.setPassword(passwordEncoder.encode(u.getPassword())));
         adminRepo.saveAll(admins);
+        List<Admin> savedAdmins = adminRepo.saveAll(admins);
 
-        java.util.List<Spectator> spectators = java.util.Arrays.asList(spec1, spec2, spec3, spec4, spec5, spec6, spec7, spec8, spec9, spec10);
+        /*___________________________________________________________________________________________________________ */
+        //                                                  Lưu save Spectator
+        List<Spectator> spectators = List.of(spec1, spec2, spec3, spec4, spec5, spec6, spec7, spec8, spec9, spec10);
         spectators.forEach(u -> u.setPassword(passwordEncoder.encode(u.getPassword())));
         spectatorRepo.saveAll(spectators);
+        List<Spectator> savedSpectators = spectatorRepo.saveAll(spectators);
 
-        java.util.List<HorseOwner> owners = java.util.Arrays.asList(ho1, ho2, ho3, ho4);
-        owners.forEach(u -> {
+        /*___________________________________________________________________________________________________________ */
+        //                                                  Lưu save horse owner
+        List<HorseOwner> horseOwners = List.of(ho1, ho2, ho3, ho4);
+        horseOwners.forEach(u -> {
             u.setPassword(passwordEncoder.encode(u.getPassword()));
-            u.setAccountStatus(com.horseracing.project3.enums.AccountStatus.APPROVED);
+            u.setAccountStatus(AccountStatus.APPROVED);
         });
-        horseOwnerRepo.saveAll(owners);
+        List<HorseOwner> savedOwners = horseOwnerRepo.saveAll(horseOwners);
 
-        java.util.List<Jockey> jockeys = java.util.Arrays.asList(joc1, joc2, joc3, joc4, joc5, joc6, joc7, joc8);
+        /*___________________________________________________________________________________________________________ */
+        //                                                  Lưu save jockey
+        List<Jockey> jockeys = List.of(joc1, joc2, joc3, joc4, joc5, joc6, joc7, joc8);
         jockeys.forEach(u -> {
             u.setPassword(passwordEncoder.encode(u.getPassword()));
-            u.setAccountStatus(com.horseracing.project3.enums.AccountStatus.APPROVED);
+            u.setAccountStatus(AccountStatus.APPROVED);
         });
         jockeyRepo.saveAll(jockeys);
+        List<Jockey> savedJockeys = jockeyRepo.saveAll(jockeys);
 
-        java.util.List<RaceReferee> refs = java.util.Arrays.asList(ref1, ref2, ref3, ref4, ref5, ref6, ref7, ref8, ref9, ref10);
-        refs.forEach(u -> {
+        /*___________________________________________________________________________________________________________ */
+        //                                                  Lưu save race referee
+        List<RaceReferee> referees = List.of(ref1, ref2, ref3, ref4, ref5, ref6, ref7, ref8, ref9, ref10);
+        referees.forEach(u -> {
             u.setPassword(passwordEncoder.encode(u.getPassword()));
-            u.setAccountStatus(com.horseracing.project3.enums.AccountStatus.APPROVED);
+            u.setAccountStatus(AccountStatus.APPROVED);
         });
-        raceRefereeRepo.saveAll(refs);
+        raceRefereeRepo.saveAll(referees);
+        List<RaceReferee> savedReferees = raceRefereeRepo.saveAll(referees);
 
         /*___________________________________________________________________________________________________________ */
         //                                              Gán savedHorseOwners vào Horse
-
         List<Horse> horses = List.of(h1, h2, h3, h4, h5, h6, h7, h8);
-
         List<Horse> savedHorses = new ArrayList<>();
 
         for (int i = 0; i < horses.size(); i++) {
             Horse currentHorse = horses.get(i);
+
+            // Tính toán Index
             int ownerIndex = i / 2;
-            ownerIndex = ownerIndex % owners.size();
-            HorseOwner assignedOwner = owners.get(ownerIndex);
+            // Sửa lại thành savedOwners.size()
+            ownerIndex = ownerIndex % savedOwners.size();
+
+            // Lấy owner từ danh sách ĐÃ ĐƯỢC LƯU VÀ CÓ ID
+            HorseOwner assignedOwner = savedOwners.get(ownerIndex);
+
+            // Thực hiện gán hai chiều
             currentHorse.setHorseOwner(assignedOwner);
             assignedOwner.addHorse(currentHorse);
+
+            // Lưu Horse xuống database
             horseService.saveHorse(currentHorse);
             savedHorses.add(currentHorse);
         }
 
-//        /*___________________________________________________________________________________________________________ */
-//        //                                              Gán admin vào Tournament
-//
-//        List<Tournament> tournaments = List.of(tour1, tour2, tour3, tour4, tour5, tour6, tour7);
-//
-//        List<Tournament> savedTournaments = new ArrayList<>();
-//
-//        for (int i = 0; i < tournaments.size(); i++) {
-//            Tournament currentTour = tournaments.get(i);
-//            ad1.addTournament(currentTour);
-//            tournamentService.saveTournament(currentTour);
-//            savedTournaments.add(currentTour);
-//        }
-//
-//
-//        /*___________________________________________________________________________________________________________ */
-//        //                                              Gán savedTournaments vào RaceSchedule
-//
-//        List<RaceSchedule> raceSchedules = List.of(rasc1, rasc2, rasc3, rasc4, rasc5, rasc6, rasc7, rasc8, rasc9, rasc10);
-//
-//        List<RaceSchedule> savedRaceSchedules = new ArrayList<>();
-//
-//        // tour1 (index 0) ôm rasc1, rasc2, rasc3
-//        savedTournaments.get(0).addRaceSchedule(rasc1);
-//        rasc1.setTournament(savedTournaments.get(0));
-//        savedTournaments.get(0).addRaceSchedule(rasc2);
-//        rasc2.setTournament(savedTournaments.get(0));
-//        savedTournaments.get(0).addRaceSchedule(rasc3);
-//        rasc3.setTournament(savedTournaments.get(0));
-//
-//        // tour2 (index 1) ôm rasc4
-//        savedTournaments.get(1).addRaceSchedule(rasc4);
-//        rasc4.setTournament(savedTournaments.get(1));
-//
-//        // tour3 (index 2) ôm rasc5
-//        savedTournaments.get(2).addRaceSchedule(rasc5);
-//        rasc5.setTournament(savedTournaments.get(2));
-//
-//        // tour4 (index 3) ôm rasc6
-//        savedTournaments.get(3).addRaceSchedule(rasc6);
-//        rasc6.setTournament(savedTournaments.get(3));
-//
-//        // tour5 (index 4) ôm rasc7
-//        savedTournaments.get(4).addRaceSchedule(rasc7);
-//        rasc7.setTournament(savedTournaments.get(4));
-//
-//        // tour6 (index 5) ôm rasc8, rasc9, rasc10
-//        savedTournaments.get(5).addRaceSchedule(rasc8);
-//        rasc8.setTournament(savedTournaments.get(5));
-//        savedTournaments.get(5).addRaceSchedule(rasc9);
-//        rasc9.setTournament(savedTournaments.get(5));
-//        savedTournaments.get(5).addRaceSchedule(rasc10);
-//        rasc10.setTournament(savedTournaments.get(5));
-//
-//        for (RaceSchedule raceSchedule : raceSchedules) {
-//            raceScheduleService.saveRaceSchedule(raceSchedule);
-//            savedRaceSchedules.add(raceSchedule);
-//        }
-
-        RaceTrack track1 = new RaceTrack();
-        track1.setName("Phu Tho Main Track");
-        track1.setLocation("Truong dua Phu Tho");
-        track1.setSurfaceType("Turf");
-        track1.setLengthMeters(1800);
-        track1.setDescription("Main turf race track for national tournament");
-
-        RaceTrack track2 = new RaceTrack();
-        track2.setName("Dai Nam Sprint Track");
-        track2.setLocation("Truong dua Dai Nam");
-        track2.setSurfaceType("Dirt");
-        track2.setLengthMeters(1400);
-        track2.setDescription("Sprint race track for seasonal tournament");
-
-        raceTrackRepo.saveAll(List.of(track1, track2));
-
-        List<Tournament> tournaments = List.of(tour1, tour2, tour3, tour4, tour5, tour6, tour7);
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán savedAdmins vào Tournament
+        List<Tournament> tournaments = List.of(tour1, tour2, tour3, tour4, tour5, tour6);
         List<Tournament> savedTournaments = new ArrayList<>();
-        for (Tournament tournament : tournaments) {
-            ad1.addTournament(tournament);
-            tournament.setStatus(TournamentStatus.ACTIVE);
-            tournament.setRegistrationOpen(true);
-            tournament.setRegistrationStartDate(LocalDateTime.now().minusDays(30));
-            tournament.setRegistrationEndDate(LocalDateTime.now().plusDays(30));
-            savedTournaments.add(tournamentService.saveTournament(tournament));
+
+        for (int i = 0; i < tournaments.size(); i++) {
+            Tournament currentTournament = tournaments.get(i);
+
+            // Lấy admin từ danh sách ĐÃ ĐƯỢC LƯU VÀ CÓ ID
+            int adminIndex = i % savedAdmins.size();
+            Admin assignedAdmin = savedAdmins.get(adminIndex);
+
+            // Thực hiện gán hai chiều
+            currentTournament.setAdmin(assignedAdmin);
+            assignedAdmin.addTournament(currentTournament);
+
+            // Lưu Tournament xuống database
+            tournamentService.saveTournament(currentTournament);
+            savedTournaments.add(currentTournament);
+
         }
 
-        rasc1.setRaceTrack(track1);
-        rasc2.setRaceTrack(track1);
-        rasc3.setRaceTrack(track1);
-        rasc4.setRaceTrack(track2);
-        rasc5.setRaceTrack(track1);
-        rasc6.setRaceTrack(track2);
-        rasc7.setRaceTrack(track2);
-        rasc8.setRaceTrack(track1);
-        rasc9.setRaceTrack(track1);
-        rasc10.setRaceTrack(track1);
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán savedTournaments vào RaceSchedule
+        
+        List<RaceSchedule> raceSchedules = List.of(rs1, rs2, rs3, rs4, rs5, rs6, rs7, rs8, rs9, rs10);
+        List<RaceSchedule> savedRaceSchedules = new ArrayList<>();
+        
+        int[] tournamentIndices = {0, 0, 0, 1, 2, 3, 4, 5, 5, 5};
 
-        savedTournaments.get(0).addRaceSchedule(rasc1);
-        savedTournaments.get(0).addRaceSchedule(rasc2);
-        savedTournaments.get(0).addRaceSchedule(rasc3);
-        savedTournaments.get(1).addRaceSchedule(rasc4);
-        savedTournaments.get(2).addRaceSchedule(rasc5);
-        savedTournaments.get(3).addRaceSchedule(rasc6);
-        savedTournaments.get(4).addRaceSchedule(rasc7);
-        savedTournaments.get(5).addRaceSchedule(rasc8);
-        savedTournaments.get(5).addRaceSchedule(rasc9);
-        savedTournaments.get(5).addRaceSchedule(rasc10);
+        for (int i = 0; i < raceSchedules.size(); i++) {
+            RaceSchedule currentRace = raceSchedules.get(i);
+            Tournament assignedTournament = savedTournaments.get(tournamentIndices[i]);
 
-        List<RaceSchedule> raceSchedules = List.of(rasc1, rasc2, rasc3, rasc4, rasc5, rasc6, rasc7, rasc8, rasc9, rasc10);
-        for (RaceSchedule raceSchedule : raceSchedules) {
-            raceScheduleService.saveRaceSchedule(raceSchedule);
+            // Thực hiện gán hai chiều
+            currentRace.setTournament(assignedTournament);
+            assignedTournament.addRaceSchedule(currentRace);
+
+            // Lưu RaceSchedule xuống database
+            raceScheduleService.saveRaceSchedule(currentRace);
+            savedRaceSchedules.add(currentRace);
         }
 
-        RaceParticipation rp1 = createParticipation(rasc1, savedHorses.get(0), jockeys.get(0), 1);
-        RaceParticipation rp2 = createParticipation(rasc1, savedHorses.get(1), jockeys.get(1), 2);
-        RaceParticipation rp3 = createParticipation(rasc1, savedHorses.get(2), jockeys.get(2), 3);
-        RaceParticipation rp4 = createParticipation(rasc2, savedHorses.get(3), jockeys.get(3), 1);
-        RaceParticipation rp5 = createParticipation(rasc2, savedHorses.get(4), jockeys.get(4), 2);
-        RaceParticipation rp6 = createParticipation(rasc6, savedHorses.get(0), jockeys.get(5), 1);
-        RaceParticipation rp7 = createParticipation(rasc6, savedHorses.get(2), jockeys.get(6), 2);
-        raceParticipationRepo.saveAll(List.of(rp1, rp2, rp3, rp4, rp5, rp6, rp7));
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán savedTournaments vào Ticket
+        List<Ticket> tickets = List.of(t1, t2, t3, t4, t5);
+        int[] ticketTournamentIndices = {0, 0, 1, 1, 2};
 
-        raceResultRepo.saveAll(List.of(
-                createResult(rasc1, rp1, refs.get(0), 1, LocalTime.of(0, 1, 42)),
-                createResult(rasc1, rp2, refs.get(0), 2, LocalTime.of(0, 1, 46)),
-                createResult(rasc1, rp3, refs.get(0), 3, LocalTime.of(0, 1, 49)),
-                createResult(rasc2, rp5, refs.get(1), 1, LocalTime.of(0, 1, 39)),
-                createResult(rasc2, rp4, refs.get(1), 2, LocalTime.of(0, 1, 44))
-        ));
+        for (int i = 0; i < tickets.size(); i++) {
+            Ticket currentTicket = tickets.get(i);
+            Tournament assignedTournament = savedTournaments.get(ticketTournamentIndices[i]);
 
-        rankingEntryRepo.saveAll(List.of(
-                createRanking(savedTournaments.get(0), savedHorses.get(0), 10, 1),
-                createRanking(savedTournaments.get(0), savedHorses.get(4), 10, 2),
-                createRanking(savedTournaments.get(0), savedHorses.get(1), 7, 3),
-                createRanking(savedTournaments.get(0), savedHorses.get(3), 7, 4),
-                createRanking(savedTournaments.get(0), savedHorses.get(2), 5, 5)
-        ));
+            currentTicket.setTournament(assignedTournament);
+            assignedTournament.addTicket(currentTicket);
+        }
 
-        Prediction prediction = new Prediction(1, LocalDateTime.now().minusHours(2), PredictionStatus.OPEN);
-        prediction.setSpectator(spec1);
-        prediction.setRaceSchedule(rasc6);
-        prediction.setHorse(savedHorses.get(0));
-        predictionRepo.save(prediction);
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán savedSpectators vào Ticket
+        int[] ticketSpectatorIndices = {0, 1, 2, 3, 4};
+        List<Ticket> savedTickets = new ArrayList<>();
 
-        Notification notification = new Notification("Demo notification for FE integration", LocalDateTime.now(), NotificationStatus.UNREAD);
-        notification.setHorseOwner(owners.get(0));
-        notificationRepo.save(notification);
+        for (int i = 0; i < tickets.size(); i++) {
+            Ticket currentTicket = tickets.get(i);
+            Spectator assignedSpectator = savedSpectators.get(ticketSpectatorIndices[i]);
 
-    }
+            currentTicket.setSpectator(assignedSpectator);
+            assignedSpectator.addTicket(currentTicket);
 
-    private RaceParticipation createParticipation(RaceSchedule raceSchedule, Horse horse, Jockey jockey, Integer laneNumber) {
-        RaceParticipation participation = new RaceParticipation(RaceParticipationStatus.CONFIRMED, laneNumber);
-        participation.setRaceSchedule(raceSchedule);
-        participation.setHorse(horse);
-        participation.setJockey(jockey);
-        participation.setJockeyInvitationStatus(JockeyInvitationStatus.PENDING);
-        return participation;
-    }
+            // Lưu Ticket xuống database
+            ticketService.saveTicket(currentTicket);
+            savedTickets.add(currentTicket);
+        }
 
-    private RaceResult createResult(RaceSchedule raceSchedule, RaceParticipation participation, RaceReferee referee, Integer rankPosition, LocalTime finishTime) {
-        RaceResult result = new RaceResult(rankPosition, finishTime, RaceResultStatus.PUBLISHED);
-        result.setRaceSchedule(raceSchedule);
-        result.setRaceParticipation(participation);
-        result.setRaceReferee(referee);
-        return result;
-    }
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán savedRaceSchedules vào RaceParticipation
+        List<RaceParticipation> raceParticipations = List.of(
+            rp1, rp2, rp3, rp4, rp5, rp6, rp7, rp8, rp9, rp10,
+            rp11, rp12, rp13, rp14, rp15, rp16, rp17, rp18, rp19, rp20,
+            rp21, rp22, rp23, rp24, rp25, rp26, rp27, rp28, rp29, rp30,
+            rp31, rp32, rp33, rp34, rp35, rp36
+        );
+        int[] rpScheduleIndices = {
+            0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8
+        };
+        for (int i = 0; i < raceParticipations.size(); i++) {
+            RaceParticipation rp = raceParticipations.get(i);
+            RaceSchedule schedule = savedRaceSchedules.get(rpScheduleIndices[i]);
+            rp.setRaceSchedule(schedule);
+            schedule.addRaceParticipation(rp);
+        }
 
-    private RankingEntry createRanking(Tournament tournament, Horse horse, Integer points, Integer rankPosition) {
-        RankingEntry rankingEntry = new RankingEntry();
-        rankingEntry.setTournament(tournament);
-        rankingEntry.setHorse(horse);
-        rankingEntry.setPoints(points);
-        rankingEntry.setRankPosition(rankPosition);
-        rankingEntry.setUpdatedAt(LocalDateTime.now());
-        return rankingEntry;
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán savedHorses vào RaceParticipation
+        int[] rpHorsesIndices = {
+            0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 4, 5, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7
+        };
+        for (int i = 0; i < raceParticipations.size(); i++) {
+            RaceParticipation rp = raceParticipations.get(i);
+            Horse horse = savedHorses.get(rpHorsesIndices[i]);
+            rp.setHorse(horse);
+            horse.addRaceParticipation(rp);
+        }
+
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán savedJockeys vào RaceParticipation
+        int[] rpJockeysIndices = {
+            0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 4, 5, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7
+        };
+        for (int i = 0; i < raceParticipations.size(); i++) {
+            RaceParticipation rp = raceParticipations.get(i);
+            Jockey jockey = savedJockeys.get(rpJockeysIndices[i]);
+            rp.setJockey(jockey);
+            jockey.addRaceParticipation(rp);
+        }
+
+        // Lưu tất cả RaceParticipation xuống database
+        raceParticipationRepo.saveAll(raceParticipations);
+
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán savedRaceSchedules vào RaceResult
+        List<RaceResult> raceResults = List.of(
+            rr1, rr2, rr3, rr4, rr5, rr6, rr7, rr8, rr9, rr10,
+            rr11, rr12, rr13, rr14, rr15, rr16, rr17, rr18, rr19, rr20,
+            rr21, rr22, rr23, rr24, rr25, rr26, rr27, rr28, rr29, rr30,
+            rr31, rr32, rr33, rr34, rr35, rr36
+        );
+        int[] rrScheduleIndices = {
+            0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8
+        };
+        for (int i = 0; i < raceResults.size(); i++) {
+            RaceResult rr = raceResults.get(i);
+            RaceSchedule schedule = savedRaceSchedules.get(rrScheduleIndices[i]);
+            rr.setRaceSchedule(schedule);
+            schedule.addRaceResult(rr);
+        }
+
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán savedReferees vào RaceResult
+        int[] rrRefereeIndices = {
+            0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8
+        };
+        for (int i = 0; i < raceResults.size(); i++) {
+            RaceResult rr = raceResults.get(i);
+            RaceReferee referee = savedReferees.get(rrRefereeIndices[i]);
+            rr.setRaceReferee(referee);
+            referee.addRaceResult(rr);
+        }
+
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán saveRaceParticipation vào RaceResult
+        for (int i = 0; i < raceResults.size(); i++) {
+            RaceResult rr = raceResults.get(i);
+            RaceParticipation rp = raceParticipations.get(i);
+            rr.setRaceParticipation(rp);
+            rp.addRaceResult(rr);
+        }
+
+        // Lưu tất cả RaceResult xuống database
+        raceResultRepo.saveAll(raceResults);
+
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán savedRaceSchedules vào Prediction
+        List<Prediction> predictions = List.of(pr1, pr2, pr3, pr4, pr5);
+        int[] prScheduleIndices = {2, 2, 3, 3, 4};
+        for (int i = 0; i < predictions.size(); i++) {
+            Prediction p = predictions.get(i);
+            RaceSchedule schedule = savedRaceSchedules.get(prScheduleIndices[i]);
+            p.setRaceSchedule(schedule);
+            schedule.addPrediction(p);
+        }
+
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán savedSpectators vào Prediction
+        int[] prSpectatorIndices = {0, 1, 2, 3, 4};
+        for (int i = 0; i < predictions.size(); i++) {
+            Prediction p = predictions.get(i);
+            Spectator spectator = savedSpectators.get(prSpectatorIndices[i]);
+            p.setSpectator(spectator);
+            spectator.addPrediction(p);
+        }
+
+        /*___________________________________________________________________________________________________________ */
+        //                                              Gán savedHorses vào Prediction
+        int[] prHorseIndices = {0, 1, 2, 3, 6};
+        for (int i = 0; i < predictions.size(); i++) {
+            Prediction p = predictions.get(i);
+            Horse horse = savedHorses.get(prHorseIndices[i]);
+            p.setHorse(horse);
+            horse.addPrediction(p);
+        }
+
+        // Lưu tất cả Prediction xuống database
+        predictionRepo.saveAll(predictions);
     }
 }

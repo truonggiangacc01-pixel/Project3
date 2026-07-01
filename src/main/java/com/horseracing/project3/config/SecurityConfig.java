@@ -40,7 +40,8 @@ public class SecurityConfig {
                                 "/error",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/v2/api-docs/**").permitAll()
+                                "/v3/api-docs",
+                                "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/admin/accounts", "/api/admin/accounts/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/owner/**").hasAuthority("ROLE_HORSE_OWNER")
                         .anyRequest().authenticated()

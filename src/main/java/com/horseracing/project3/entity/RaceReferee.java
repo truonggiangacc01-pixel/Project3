@@ -38,7 +38,7 @@ public class RaceReferee {
     @Column(name = "experience_years", nullable = false)
     private Integer experienceYears;
 
-    @Column(name = "certificate_level", nullable = false)
+    @Column(name = "certificate_level", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String certificateLevel;
 
     @Enumerated(EnumType.STRING)

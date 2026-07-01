@@ -127,12 +127,19 @@ public class Tournament {
     /*___________________________________________________________________________________________________________ */
     //                                                  CONSTRUCTOR FULL
 
-    public Tournament(String name, String location, LocalDate startDate, LocalDate endDate) {
+    public Tournament(String name, String location, LocalDate startDate, LocalDate endDate, TournamentStatus status, String cancelReason, LocalDateTime registrationStartDate, LocalDateTime registrationEndDate, Boolean registrationOpen) {
         this.name = name;
         this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.status = status;
+        this.cancelReason = cancelReason;
+        this.registrationStartDate = registrationStartDate;
+        this.registrationEndDate = registrationEndDate;
+        this.registrationOpen = registrationOpen;
     }
+
+
 
     /*___________________________________________________________________________________________________________ */
     //                                                  GETTER, SETTER

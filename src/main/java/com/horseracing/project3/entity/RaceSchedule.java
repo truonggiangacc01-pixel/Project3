@@ -126,15 +126,18 @@ public class RaceSchedule {
 
     /*___________________________________________________________________________________________________________ */
     //                                                  CONSTRUCTOR FULL
-    
-    public RaceSchedule(String name, LocalDate raceDate, String location, RaceScheduleStatus status, LocalDateTime startTime, LocalDateTime endTime) {
+
+    public RaceSchedule(String name, LocalDate raceDate, String location, String delayReason, RaceScheduleStatus status, LocalDateTime startTime, LocalDateTime endTime) {
         this.name = name;
         this.raceDate = raceDate;
         this.location = location;
+        this.delayReason = delayReason;
         this.status = status;
         this.startTime = startTime;
         this.endTime = endTime;
     }
+
+
 
     /*___________________________________________________________________________________________________________ */
     //                                                  GETTER, SETTER
