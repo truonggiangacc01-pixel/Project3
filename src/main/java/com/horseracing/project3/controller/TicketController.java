@@ -37,13 +37,13 @@ public class TicketController {
     @PostMapping("/purchase")
     public ResponseEntity<?> purchaseTicket(@RequestBody PurchaseRequest request) {
         try {
-            Ticket ticket = ticketService.purchaseTicket(
+            Object result = ticketService.purchaseTicket(
                     request.spectatorId,
                     request.tournamentId,
                     request.gateway,
                     request.price
             );
-            return new ResponseEntity<>(ticket, HttpStatus.CREATED);
+            return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

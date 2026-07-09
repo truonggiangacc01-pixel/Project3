@@ -38,8 +38,11 @@ public class TicketService {
         ticketRepo.save(ticket);
     }
 
+    @Autowired
+    private vn.payos.PayOS payOS;
+
     @Transactional
-    public Ticket purchaseTicket(Integer spectatorId, Integer tournamentId, PaymentGateway gateway, BigDecimal price) {
+    public Object purchaseTicket(Integer spectatorId, Integer tournamentId, PaymentGateway gateway, BigDecimal price) {
         Spectator spectator = spectatorRepo.findById(spectatorId)
                 .orElseThrow(() -> new RuntimeException("Spectator not found"));
         Tournament tournament = tournamentRepo.findById(tournamentId)
@@ -49,31 +52,50 @@ public class TicketService {
             throw new RuntimeException("Tournament registration is closed. You cannot purchase tickets at this time.");
         }
 
-        // Mô phỏng gọi API cổng thanh toán VNPay/MoMo ở đây
-        boolean paymentSuccess = true; // Giả lập thanh toán luôn thành công
-
-        if (!paymentSuccess) {
-            PaymentTransaction failedTx = new PaymentTransaction(spectator, null, price, TransactionStatus.FAILED, gateway);
-            transactionRepo.save(failedTx);
-            throw new RuntimeException("Payment failed via " + gateway);
-        }
-
-        // Tạo Ticket (BR-43: Tạo ticket_code unique)
+        // 1. Tạo Ticket (Trạng thái PENDING)
         Ticket newTicket = new Ticket();
         newTicket.setTicketCode(UUID.randomUUID().toString());
         newTicket.setPrice(price);
-        newTicket.setStatus(TicketStatus.SOLD); // Mặc định ticket khi mua thành công là SOLD
+        newTicket.setStatus(TicketStatus.PENDING);
         newTicket.setPurchaseDate(LocalDateTime.now());
         newTicket.setSpectator(spectator);
         newTicket.setTournament(tournament);
 
         Ticket savedTicket = ticketRepo.save(newTicket);
 
-        // Lưu Transaction
-        PaymentTransaction successTx = new PaymentTransaction(spectator, savedTicket, price, TransactionStatus.SUCCESS, gateway);
-        transactionRepo.save(successTx);
+        // 2. Tạo Transaction (Trạng thái PENDING)
+        PaymentTransaction pendingTx = new PaymentTransaction(spectator, savedTicket, price, TransactionStatus.PENDING, gateway);
+        PaymentTransaction savedTx = transactionRepo.save(pendingTx);
 
-        return savedTicket;
+        // 3. Gọi PayOS để lấy link thanh toán
+        try {
+            Long orderCode = savedTx.getId().longValue(); // Sử dụng ID làm orderCode
+            
+            // Xây dựng request tạo link thanh toán (SDK v2)
+            vn.payos.model.v2.paymentRequests.CreatePaymentLinkRequest paymentRequest = 
+                vn.payos.model.v2.paymentRequests.CreatePaymentLinkRequest.builder()
+                    .orderCode(orderCode)
+                    .amount((long) price.intValue())
+                    .description("Thanh toan ve dua ngua")
+                    .returnUrl("http://localhost:3000/payment/success")
+                    .cancelUrl("http://localhost:3000/payment/cancel")
+                    .build();
+
+            // Lấy URL Checkout từ PayOS
+            vn.payos.model.v2.paymentRequests.CreatePaymentLinkResponse data = payOS.paymentRequests().create(paymentRequest);
+            
+            // Trả về một Map chứa Ticket tạm và checkoutUrl
+            java.util.Map<String, Object> response = new java.util.HashMap<>();
+            response.put("ticket", savedTicket);
+            response.put("checkoutUrl", data.getCheckoutUrl());
+            response.put("orderCode", orderCode);
+            
+            return response;
+        } catch (Exception e) {
+            // Rollback bằng cách ném Exception
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi tạo link thanh toán PayOS: " + e.getMessage());
+        }
     }
 
     @Transactional
