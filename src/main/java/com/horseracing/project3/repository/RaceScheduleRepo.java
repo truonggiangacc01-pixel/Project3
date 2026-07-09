@@ -22,4 +22,6 @@ public interface RaceScheduleRepo extends JpaRepository<RaceSchedule, Integer> {
                                             @Param("currentScheduleId") Integer currentScheduleId, 
                                             @Param("startTime") LocalDateTime startTime, 
                                             @Param("endTime") LocalDateTime endTime);
+
+    java.util.Optional<RaceSchedule> findByName(String name);
 }

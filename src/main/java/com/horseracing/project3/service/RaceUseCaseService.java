@@ -78,6 +78,9 @@ public class RaceUseCaseService {
 
     public RaceTrack createRaceTrack(RaceTrackRequest request) {
         validateRaceTrack(request);
+        if (raceTrackRepo.findByName(request.name()).isPresent()) {
+            throw new RuntimeException("Tên trường đua đã tồn tại");
+        }
         RaceTrack track = new RaceTrack();
         applyRaceTrack(track, request);
         return raceTrackRepo.save(track);
@@ -388,6 +391,9 @@ public class RaceUseCaseService {
     private void validateRaceTrack(RaceTrackRequest request) {
         if (isBlank(request.name()) || isBlank(request.location())) {
             throw new RuntimeException("Race track name and location are required");
+        }
+        if (request.lengthMeters() == null || request.lengthMeters() < 1000) {
+            throw new RuntimeException("Chiều dài đường đua tối thiểu là 1000m");
         }
     }
 

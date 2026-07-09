@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RaceTrackRepo extends JpaRepository<RaceTrack, Integer> {
+    java.util.Optional<RaceTrack> findByName(String name);
 }

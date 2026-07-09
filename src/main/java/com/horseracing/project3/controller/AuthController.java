@@ -5,15 +5,11 @@ import com.horseracing.project3.dto.response.LoginResponse;
 import com.horseracing.project3.service.AuthService;
 import com.horseracing.project3.dto.request.ForgotPasswordRequest;
 import com.horseracing.project3.dto.request.ResetPasswordRequest;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -56,6 +52,20 @@ public class AuthController {
         try {
             authService.resetPassword(request);
             return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Đặt lại mật khẩu thành công!\"}");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"" + e.getMessage() + "\"}");
+        }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(java.security.Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED).body("{\"success\": false, \"message\": \"User is not authenticated\"}");
+        }
+        try {
+            String email = principal.getName();
+            Object userInfo = authService.getUserInfoByEmail(email);
+            return ResponseEntity.ok(userInfo);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"" + e.getMessage() + "\"}");
         }

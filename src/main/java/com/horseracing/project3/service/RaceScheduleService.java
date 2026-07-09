@@ -24,6 +24,13 @@ public class RaceScheduleService {
     }
 
     public RaceSchedule createRaceSchedule(Integer tournamentId, CreateRaceScheduleRequest request) {
+        if (request.getName() == null || request.getName().trim().isEmpty()) {
+            throw new RuntimeException("Tên lịch đua không được để trống");
+        }
+        if (raceScheduleRepo.findByName(request.getName()).isPresent()) {
+            throw new RuntimeException("Tên lịch đua đã tồn tại");
+        }
+
         Tournament tournament = tournamentRepo.findById(tournamentId)
                 .orElseThrow(() -> new RuntimeException("Tournament not found"));
 

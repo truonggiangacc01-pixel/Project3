@@ -26,6 +26,9 @@ public class TournamentService {
     @Transactional
     public TournamentResponseDto createTournament(TournamentRequestDto requestDto, String adminEmail) {
         // Validate date
+        if (requestDto.getStartDate().isBefore(java.time.LocalDate.now())) {
+            throw new IllegalArgumentException("Ngày bắt đầu không được trong quá khứ");
+        }
         if (requestDto.getStartDate().isAfter(requestDto.getEndDate())) {
             throw new IllegalArgumentException("Ngày bắt đầu không được lớn hơn ngày kết thúc");
         }
@@ -65,19 +68,34 @@ public class TournamentService {
 
         if (tournament.getStatus() == TournamentStatus.ONGOING) {
             // Constraint 1: restrict edit
-            if (requestDto.getName() != null) tournament.setName(requestDto.getName());
-            if (requestDto.getLocation() != null) tournament.setLocation(requestDto.getLocation());
+            if (requestDto.getName() != null) {
+                if (requestDto.getName().trim().isEmpty()) throw new IllegalArgumentException("Tên giải đấu không được để trống");
+                tournament.setName(requestDto.getName());
+            }
+            if (requestDto.getLocation() != null) {
+                if (requestDto.getLocation().trim().isEmpty()) throw new IllegalArgumentException("Địa điểm không được để trống");
+                tournament.setLocation(requestDto.getLocation());
+            }
         } else {
             // Allow full update
             if (requestDto.getStartDate() != null && requestDto.getEndDate() != null) {
+                 if (requestDto.getStartDate().isBefore(java.time.LocalDate.now())) {
+                     throw new IllegalArgumentException("Ngày bắt đầu không được trong quá khứ");
+                 }
                  if (requestDto.getStartDate().isAfter(requestDto.getEndDate())) {
                      throw new IllegalArgumentException("Ngày bắt đầu không được lớn hơn ngày kết thúc");
                  }
                  tournament.setStartDate(requestDto.getStartDate());
                  tournament.setEndDate(requestDto.getEndDate());
             }
-            if (requestDto.getName() != null) tournament.setName(requestDto.getName());
-            if (requestDto.getLocation() != null) tournament.setLocation(requestDto.getLocation());
+            if (requestDto.getName() != null) {
+                if (requestDto.getName().trim().isEmpty()) throw new IllegalArgumentException("Tên giải đấu không được để trống");
+                tournament.setName(requestDto.getName());
+            }
+            if (requestDto.getLocation() != null) {
+                if (requestDto.getLocation().trim().isEmpty()) throw new IllegalArgumentException("Địa điểm không được để trống");
+                tournament.setLocation(requestDto.getLocation());
+            }
         }
 
         if (requestDto.getStatus() != null) {
@@ -109,8 +127,8 @@ public class TournamentService {
             throw new RuntimeException("Giải đấu đã kết thúc hoặc bị hủy, không thể hủy");
         }
 
-        if (tournament.getStatus() == TournamentStatus.ONGOING && !requestDto.isForceCancel()) {
-            throw new RuntimeException("Yêu cầu xác nhận đặc biệt: Giải đấu đang diễn ra. Vui lòng gửi forceCancel = true để xác nhận hủy.");
+        if (!requestDto.isForceCancel()) {
+            throw new RuntimeException("Yêu cầu xác nhận đặc biệt: Vui lòng gửi forceCancel = true để xác nhận hủy.");
         }
 
         if (requestDto.getReason() == null || requestDto.getReason().trim().isEmpty()) {
@@ -129,6 +147,10 @@ public class TournamentService {
 
         if (requestDto.getRegistrationStartDate() == null || requestDto.getRegistrationEndDate() == null) {
             throw new IllegalArgumentException("Thời gian đăng ký không được để trống");
+        }
+
+        if (tournament.getStatus() == TournamentStatus.COMPLETED || tournament.getStatus() == TournamentStatus.CANCELLED) {
+            throw new RuntimeException("Không thể mở đăng ký cho giải đấu đã kết thúc hoặc bị hủy");
         }
 
         if (requestDto.getRegistrationStartDate().isAfter(requestDto.getRegistrationEndDate())) {

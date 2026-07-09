@@ -30,7 +30,7 @@ public class EmailService {
             message.setSubject(subject);
             message.setText(body);
             // TẠM THỜI TẮT GỬI MAIL THẬT ĐỂ TRÁNH LỖI ĐỎ DO DÙNG EMAIL GIẢ
-            // mailSender.send(message);
+             mailSender.send(message);
 
         } catch (Exception e) {
             logger.error("Failed to send email to {}", to, e);
