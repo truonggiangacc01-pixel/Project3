@@ -38,21 +38,6 @@ public class AuthService {
         String email = request.getEmail();
         String rawPassword = request.getPassword();
 
-
-        // --- ĐOẠN CODE BẮT BỆNH (BẠN CHỈ CẦN DÁN VÀO ĐÂY) ---
-        System.out.println("====== DEBUG LỖI MA ======");
-        System.out.println("1. Email Postman truyền lên: [" + email + "] - Độ dài: " + email.length() + " ký tự");
-
-        java.util.List<Spectator> list = spectatorRepo.findAll();
-        System.out.println("2. Đang có bao nhiêu khán giả trong Database mà Java thấy? : " + list.size());
-
-        if (!list.isEmpty()) {
-            String dbEmail = list.get(list.size() - 1).getEmail(); // Lấy người vừa đăng ký
-            System.out.println("3. Email nằm trong Database: [" + dbEmail + "] - Độ dài: " + dbEmail.length() + " ký tự");
-            System.out.println("4. Hai chuỗi có giống nhau y hệt không? " + email.equals(dbEmail));
-        }
-        System.out.println("==========================");
-
         // 1. Check Admin
         Optional<Admin> adminOpt = adminRepo.findByEmail(email);
         if (adminOpt.isPresent()) {
@@ -212,6 +197,35 @@ public class AuthService {
         }
 
         throw new RuntimeException("Không tìm thấy tài khoản để cập nhật!");
+    }
+
+    public Object getUserInfoByEmail(String email) {
+        Optional<Admin> adminOpt = adminRepo.findByEmail(email);
+        if (adminOpt.isPresent()) {
+            return adminOpt.get();
+        }
+
+        Optional<Spectator> specOpt = spectatorRepo.findByEmail(email);
+        if (specOpt.isPresent()) {
+            return specOpt.get();
+        }
+
+        Optional<HorseOwner> ownerOpt = horseOwnerRepo.findByEmail(email);
+        if (ownerOpt.isPresent()) {
+            return ownerOpt.get();
+        }
+
+        Optional<Jockey> jockeyOpt = jockeyRepo.findByEmail(email);
+        if (jockeyOpt.isPresent()) {
+            return jockeyOpt.get();
+        }
+
+        Optional<RaceReferee> refOpt = raceRefereeRepo.findByEmail(email);
+        if (refOpt.isPresent()) {
+            return refOpt.get();
+        }
+
+        throw new RuntimeException("User not found!");
     }
 
 }
