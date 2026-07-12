@@ -2,6 +2,7 @@ package com.horseracing.project3.entity;
 
 import com.horseracing.project3.enums.PaymentGateway;
 import com.horseracing.project3.enums.TransactionStatus;
+import com.horseracing.project3.enums.TransactionType;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -35,6 +36,10 @@ public class PaymentTransaction {
     @Column(name = "payment_gateway", nullable = false)
     private PaymentGateway paymentGateway;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "transaction_type", nullable = false)
+    private TransactionType transactionType = TransactionType.TICKET_PURCHASE;
+
     @Column(name = "transaction_date", nullable = false)
     private LocalDateTime transactionDate;
 
@@ -47,6 +52,17 @@ public class PaymentTransaction {
         this.amount = amount;
         this.status = status;
         this.paymentGateway = paymentGateway;
+        this.transactionType = TransactionType.TICKET_PURCHASE;
+        this.transactionDate = LocalDateTime.now();
+    }
+
+    public PaymentTransaction(Spectator spectator, Ticket ticket, BigDecimal amount, TransactionStatus status, PaymentGateway paymentGateway, TransactionType transactionType) {
+        this.spectator = spectator;
+        this.ticket = ticket;
+        this.amount = amount;
+        this.status = status;
+        this.paymentGateway = paymentGateway;
+        this.transactionType = transactionType;
         this.transactionDate = LocalDateTime.now();
     }
 
@@ -92,6 +108,14 @@ public class PaymentTransaction {
 
     public void setPaymentGateway(PaymentGateway paymentGateway) {
         this.paymentGateway = paymentGateway;
+    }
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
     }
 
     public LocalDateTime getTransactionDate() {

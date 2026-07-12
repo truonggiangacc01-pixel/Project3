@@ -112,6 +112,9 @@ public class UseCaseResponseDtos {
     public record RuleViolationResponse(
             Integer id,
             Integer raceId,
+            Integer participationId,
+            Integer horseId,
+            Integer jockeyId,
             String description,
             String penalty,
             String evidence,
@@ -122,6 +125,9 @@ public class UseCaseResponseDtos {
             return new RuleViolationResponse(
                     violation.getId(),
                     violation.getRaceSchedule() == null ? null : violation.getRaceSchedule().getId(),
+                    violation.getRaceParticipation() == null ? null : violation.getRaceParticipation().getId(),
+                    violation.getHorse() == null ? null : violation.getHorse().getId(),
+                    violation.getJockey() == null ? null : violation.getJockey().getId(),
                     violation.getDescription(),
                     violation.getPenalty(),
                     violation.getEvidence(),
@@ -147,6 +153,29 @@ public class UseCaseResponseDtos {
                     entry.getTournament() == null ? null : entry.getTournament().getId(),
                     horse == null ? null : horse.getId(),
                     horse == null ? null : horse.getName(),
+                    entry.getPoints(),
+                    entry.getRankPosition(),
+                    entry.getUpdatedAt()
+            );
+        }
+    }
+
+    public record JockeyRankingEntryResponse(
+            Integer id,
+            Integer tournamentId,
+            Integer jockeyId,
+            String jockeyName,
+            Integer points,
+            Integer rankPosition,
+            LocalDateTime updatedAt
+    ) {
+        public static JockeyRankingEntryResponse from(JockeyRankingEntry entry) {
+            Jockey jockey = entry.getJockey();
+            return new JockeyRankingEntryResponse(
+                    entry.getId(),
+                    entry.getTournament() == null ? null : entry.getTournament().getId(),
+                    jockey == null ? null : jockey.getId(),
+                    jockey == null ? null : jockey.getFullName(),
                     entry.getPoints(),
                     entry.getRankPosition(),
                     entry.getUpdatedAt()

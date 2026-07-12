@@ -34,6 +34,18 @@ public class RuleViolation {
     @JoinColumn(name = "RaceScheduleId", nullable = false)
     private RaceSchedule raceSchedule;
 
+    @ManyToOne
+    @JoinColumn(name = "RaceParticipationId")
+    private RaceParticipation raceParticipation;
+
+    @ManyToOne
+    @JoinColumn(name = "HorseId")
+    private Horse horse;
+
+    @ManyToOne
+    @JoinColumn(name = "JockeyId")
+    private Jockey jockey;
+
     public Integer getId() {
         return id;
     }
@@ -84,5 +96,29 @@ public class RuleViolation {
 
     public void setRaceSchedule(RaceSchedule raceSchedule) {
         this.raceSchedule = raceSchedule;
+    }
+
+    public RaceParticipation getRaceParticipation() {
+        return raceParticipation;
+    }
+
+    public void setRaceParticipation(RaceParticipation raceParticipation) {
+        this.raceParticipation = raceParticipation;
+    }
+
+    public Horse getHorse() {
+        return horse;
+    }
+
+    public void setHorse(Horse horse) {
+        this.horse = horse;
+    }
+
+    public Jockey getJockey() {
+        return jockey;
+    }
+
+    public void setJockey(Jockey jockey) {
+        this.jockey = jockey;
     }
 }

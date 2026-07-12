@@ -30,6 +30,16 @@ public class SystemUseCaseController {
         }
     }
 
+    @PostMapping("/predictions/settle/{raceId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> settleRacePredictions(@PathVariable Integer raceId) {
+        try {
+            return ResponseEntity.ok(new ApiResponse<>(true, "Race predictions settled", raceUseCaseService.settleRacePredictions(raceId)));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
+    }
+
     @PostMapping("/notifications")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> sendNotification(@RequestBody SendNotificationRequest request) {

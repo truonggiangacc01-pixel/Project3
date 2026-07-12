@@ -2,6 +2,7 @@ package com.horseracing.project3.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,9 @@ public class Spectator {
 
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
+
+    @Column(name = "wallet_balance", columnDefinition = "DECIMAL(15, 0)", nullable = false)
+    private BigDecimal walletBalance = BigDecimal.ZERO;
 
     /*___________________________________________________________________________________________________________ */
 
@@ -141,6 +145,14 @@ public class Spectator {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public BigDecimal getWalletBalance() {
+        return walletBalance == null ? BigDecimal.ZERO : walletBalance;
+    }
+
+    public void setWalletBalance(BigDecimal walletBalance) {
+        this.walletBalance = walletBalance == null ? BigDecimal.ZERO : walletBalance;
     }
 
 

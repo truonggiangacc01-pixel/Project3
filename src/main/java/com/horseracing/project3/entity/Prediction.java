@@ -3,6 +3,7 @@ package com.horseracing.project3.entity;
 import com.horseracing.project3.enums.PredictionStatus;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,6 +24,12 @@ public class Prediction {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private PredictionStatus status;
+
+    @Column(name = "stake_amount", columnDefinition = "DECIMAL(15, 0)", nullable = false)
+    private BigDecimal stakeAmount = BigDecimal.ZERO;
+
+    @Column(name = "payout_amount", columnDefinition = "DECIMAL(15, 0)")
+    private BigDecimal payoutAmount;
 
     /*___________________________________________________________________________________________________________ */
 
@@ -85,6 +92,7 @@ public class Prediction {
         this.number = number;
         this.createdAt = createdAt;
         this.status = status;
+        this.stakeAmount = BigDecimal.ZERO;
     }
 
     /*___________________________________________________________________________________________________________ */
@@ -112,6 +120,26 @@ public class Prediction {
 
     public void setStatus(PredictionStatus status) {
         this.status = status;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public BigDecimal getStakeAmount() {
+        return stakeAmount == null ? BigDecimal.ZERO : stakeAmount;
+    }
+
+    public void setStakeAmount(BigDecimal stakeAmount) {
+        this.stakeAmount = stakeAmount == null ? BigDecimal.ZERO : stakeAmount;
+    }
+
+    public BigDecimal getPayoutAmount() {
+        return payoutAmount;
+    }
+
+    public void setPayoutAmount(BigDecimal payoutAmount) {
+        this.payoutAmount = payoutAmount;
     }
 
     /*___________________________________________________________________________________________________________ */

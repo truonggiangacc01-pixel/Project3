@@ -50,7 +50,24 @@ public class UseCaseRequestDtos {
     ) {
     }
 
+    public record InspectionItemRequest(
+            Integer participationId,
+            Boolean horseReady,
+            Boolean jockeyReady,
+            String note
+    ) {
+    }
+
+    public record InspectionRequest(
+            Integer refereeId,
+            List<InspectionItemRequest> items
+    ) {
+    }
+
     public record RuleViolationRequest(
+            Integer participationId,
+            Integer horseId,
+            Integer jockeyId,
             String description,
             String penalty,
             String evidence

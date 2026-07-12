@@ -1,12 +1,14 @@
 package com.horseracing.project3.service;
 
 import com.horseracing.project3.dto.request.UseCaseRequestDtos.*;
+import com.horseracing.project3.dto.response.ExportedFile;
 import com.horseracing.project3.entity.*;
 import com.horseracing.project3.enums.*;
 import com.horseracing.project3.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -41,6 +43,9 @@ public class RaceUseCaseService {
     private RankingEntryRepo rankingEntryRepo;
 
     @Autowired
+    private JockeyRankingEntryRepo jockeyRankingEntryRepo;
+
+    @Autowired
     private TournamentRepo tournamentRepo;
 
     @Autowired
@@ -54,6 +59,9 @@ public class RaceUseCaseService {
 
     @Autowired
     private JockeyRepo jockeyRepo;
+
+    @Autowired
+    private PredictionService predictionService;
 
     public RaceSchedule delayRace(Integer raceId, DelayRaceRequest request) {
         RaceSchedule race = findRace(raceId);
@@ -165,8 +173,9 @@ public class RaceUseCaseService {
 
     public List<RaceResult> recordRaceResult(Integer raceId, RecordRaceResultRequest request) {
         RaceSchedule race = findRace(raceId);
-        if (race.getStatus() != RaceScheduleStatus.COMPLETED) {
-            throw new RuntimeException("Race must be completed before recording results");
+        if (race.getStatus() != RaceScheduleStatus.RUNNING && race.getStatus() != RaceScheduleStatus.ONGOING
+                && race.getStatus() != RaceScheduleStatus.COMPLETED) {
+            throw new RuntimeException("Race must be running or completed before recording results");
         }
         if (request.results() == null || request.results().isEmpty()) {
             throw new RuntimeException("Race result data is required");
@@ -201,7 +210,48 @@ public class RaceUseCaseService {
             result.setStatus(RaceResultStatus.UNOFFICIAL);
             saved.add(raceResultRepo.save(result));
         }
+        if (race.getStatus() == RaceScheduleStatus.RUNNING || race.getStatus() == RaceScheduleStatus.ONGOING) {
+            race.setStatus(RaceScheduleStatus.COMPLETED);
+            raceScheduleRepo.save(race);
+        }
         return saved;
+    }
+
+    public Map<String, Object> inspectRaceParticipants(Integer raceId, InspectionRequest request) {
+        RaceSchedule race = findRace(raceId);
+        if (race.getStatus() == RaceScheduleStatus.RUNNING || race.getStatus() == RaceScheduleStatus.ONGOING
+                || race.getStatus() == RaceScheduleStatus.COMPLETED) {
+            throw new RuntimeException("Inspection must be completed before the race starts");
+        }
+        if (request.items() == null || request.items().isEmpty()) {
+            throw new RuntimeException("Inspection items are required");
+        }
+        if (request.refereeId() != null && !raceRefereeRepo.existsById(request.refereeId())) {
+            throw new RuntimeException("Race referee not found");
+        }
+
+        int confirmed = 0;
+        int scratched = 0;
+        for (InspectionItemRequest item : request.items()) {
+            RaceParticipation participation = raceParticipationRepo.findById(item.participationId())
+                    .orElseThrow(() -> new RuntimeException("Race participation not found: " + item.participationId()));
+            if (participation.getRaceSchedule() == null || !participation.getRaceSchedule().getId().equals(raceId)) {
+                throw new RuntimeException("Participation does not belong to this race: " + item.participationId());
+            }
+            boolean ready = Boolean.TRUE.equals(item.horseReady()) && Boolean.TRUE.equals(item.jockeyReady());
+            participation.setHorseReady(Boolean.TRUE.equals(item.horseReady()));
+            participation.setJockeyReady(Boolean.TRUE.equals(item.jockeyReady()));
+            participation.setInspectionNote(item.note());
+            participation.setInspectedAt(LocalDateTime.now());
+            participation.setStatus(ready ? RaceParticipationStatus.CONFIRMED : RaceParticipationStatus.SCRATCHED);
+            raceParticipationRepo.save(participation);
+            if (ready) {
+                confirmed++;
+            } else {
+                scratched++;
+            }
+        }
+        return Map.of("raceId", raceId, "confirmed", confirmed, "scratched", scratched);
     }
 
     public RaceReport submitPreRaceReport(Integer raceId, RaceReportRequest request) {
@@ -239,6 +289,24 @@ public class RaceUseCaseService {
         violation.setEvidence(request.evidence());
         violation.setCreatedAt(LocalDateTime.now());
         violation.setStatus(isBlank(request.evidence()) ? RuleViolationStatus.PENDING_REVIEW : RuleViolationStatus.DECIDED);
+        if (request.participationId() != null) {
+            RaceParticipation participation = raceParticipationRepo.findById(request.participationId())
+                    .orElseThrow(() -> new RuntimeException("Race participation not found"));
+            if (participation.getRaceSchedule() == null || !participation.getRaceSchedule().getId().equals(raceId)) {
+                throw new RuntimeException("Participation does not belong to this race");
+            }
+            violation.setRaceParticipation(participation);
+            violation.setHorse(participation.getHorse());
+            violation.setJockey(participation.getJockey());
+        }
+        if (request.horseId() != null) {
+            violation.setHorse(horseRepo.findById(request.horseId())
+                    .orElseThrow(() -> new RuntimeException("Horse not found")));
+        }
+        if (request.jockeyId() != null) {
+            violation.setJockey(jockeyRepo.findById(request.jockeyId())
+                    .orElseThrow(() -> new RuntimeException("Jockey not found")));
+        }
         return ruleViolationRepo.save(violation);
     }
 
@@ -252,7 +320,14 @@ public class RaceUseCaseService {
             throw new RuntimeException("No race results found");
         }
         results.forEach(result -> result.setStatus(RaceResultStatus.PUBLISHED));
-        return raceResultRepo.saveAll(results);
+        List<RaceResult> published = raceResultRepo.saveAll(results);
+        predictionService.settleRacePredictions(raceId);
+        return published;
+    }
+
+    public Map<String, Object> settleRacePredictions(Integer raceId) {
+        findRace(raceId);
+        return Map.of("raceId", raceId, "settledPredictions", predictionService.settleRacePredictions(raceId));
     }
 
     public List<RankingEntry> updateRankingTable(Integer tournamentId) {
@@ -300,6 +375,52 @@ public class RaceUseCaseService {
         return rankingEntryRepo.findByTournamentIdOrderByRankPositionAsc(tournamentId);
     }
 
+    public List<JockeyRankingEntry> updateJockeyRankingTable(Integer tournamentId) {
+        Tournament tournament = tournamentRepo.findById(tournamentId)
+                .orElseThrow(() -> new RuntimeException("Tournament not found"));
+        List<RaceSchedule> races = raceScheduleRepo.findByTournamentIdOrderByStartTimeAsc(tournamentId);
+        Map<Integer, Integer> jockeyPoints = new HashMap<>();
+        Map<Integer, Jockey> jockeys = new HashMap<>();
+        for (RaceSchedule race : races) {
+            for (RaceResult result : raceResultRepo.findByRaceScheduleId(race.getId())) {
+                if (result.getStatus() != RaceResultStatus.PUBLISHED && result.getStatus() != RaceResultStatus.OFFICIAL) {
+                    continue;
+                }
+                RaceParticipation participation = result.getRaceParticipation();
+                Jockey jockey = participation == null ? null : participation.getJockey();
+                if (jockey == null || result.getRankPosition() == null) {
+                    continue;
+                }
+                jockeys.put(jockey.getId(), jockey);
+                jockeyPoints.merge(jockey.getId(), calculatePoints(result.getRankPosition()), Integer::sum);
+            }
+        }
+        if (jockeyPoints.isEmpty()) {
+            throw new RuntimeException("No valid race result data for jockey ranking");
+        }
+
+        List<Map.Entry<Integer, Integer>> ordered = jockeyPoints.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
+                .toList();
+        List<JockeyRankingEntry> saved = new ArrayList<>();
+        int rank = 1;
+        for (Map.Entry<Integer, Integer> entry : ordered) {
+            JockeyRankingEntry rankingEntry = jockeyRankingEntryRepo.findByTournamentIdAndJockeyId(tournamentId, entry.getKey())
+                    .orElseGet(JockeyRankingEntry::new);
+            rankingEntry.setTournament(tournament);
+            rankingEntry.setJockey(jockeys.get(entry.getKey()));
+            rankingEntry.setPoints(entry.getValue());
+            rankingEntry.setRankPosition(rank++);
+            rankingEntry.setUpdatedAt(LocalDateTime.now());
+            saved.add(jockeyRankingEntryRepo.save(rankingEntry));
+        }
+        return saved;
+    }
+
+    public List<JockeyRankingEntry> viewJockeyRankingTable(Integer tournamentId) {
+        return jockeyRankingEntryRepo.findByTournamentIdOrderByRankPositionAsc(tournamentId);
+    }
+
     public Map<String, Object> generateTournamentReport(Integer tournamentId) {
         Tournament tournament = tournamentRepo.findById(tournamentId)
                 .orElseThrow(() -> new RuntimeException("Tournament not found"));
@@ -326,20 +447,22 @@ public class RaceUseCaseService {
             throw new RuntimeException("No race data found");
         }
         String format = isBlank(request.format()) ? "csv" : request.format().toLowerCase();
-        if (!format.equals("csv")) {
-            throw new RuntimeException("Only csv export is supported");
+        ExportedFile file = exportRaceDataFile(tournamentId, request);
+        return Map.of("format", format, "fileName", file.fileName(), "contentType", file.contentType(), "content", new String(file.content(), StandardCharsets.UTF_8));
+    }
+
+    public ExportedFile exportRaceDataFile(Integer tournamentId, ExportRaceDataRequest request) {
+        List<RaceSchedule> races = raceScheduleRepo.findByTournamentIdOrderByStartTimeAsc(tournamentId);
+        if (races.isEmpty()) {
+            throw new RuntimeException("No race data found");
         }
-        StringBuilder csv = new StringBuilder("raceId,name,status,startTime,endTime,resultCount\n");
-        for (RaceSchedule race : races) {
-            csv.append(race.getId()).append(',')
-                    .append(cleanCsv(race.getName())).append(',')
-                    .append(race.getStatus()).append(',')
-                    .append(race.getStartTime()).append(',')
-                    .append(race.getEndTime()).append(',')
-                    .append(raceResultRepo.findByRaceScheduleId(race.getId()).size())
-                    .append('\n');
-        }
-        return Map.of("format", "csv", "fileName", "race-data-" + tournamentId + ".csv", "content", csv.toString());
+        String format = isBlank(request.format()) ? "csv" : request.format().toLowerCase();
+        return switch (format) {
+            case "csv" -> new ExportedFile("race-data-" + tournamentId + ".csv", "text/csv", buildRaceCsv(races).getBytes(StandardCharsets.UTF_8));
+            case "xls", "excel" -> new ExportedFile("race-data-" + tournamentId + ".xls", "application/vnd.ms-excel", buildRaceExcelHtml(races).getBytes(StandardCharsets.UTF_8));
+            case "pdf" -> new ExportedFile("race-data-" + tournamentId + ".pdf", "application/pdf", buildSimplePdf(buildRaceTextLines(races)));
+            default -> throw new RuntimeException("Supported export formats: csv, xls, pdf");
+        };
     }
 
     public Notification sendNotification(SendNotificationRequest request) {
@@ -435,6 +558,78 @@ public class RaceUseCaseService {
 
     private String cleanCsv(String value) {
         return value == null ? "" : value.replace(",", " ");
+    }
+
+    private String buildRaceCsv(List<RaceSchedule> races) {
+        StringBuilder csv = new StringBuilder("raceId,name,status,startTime,endTime,resultCount\n");
+        for (RaceSchedule race : races) {
+            csv.append(race.getId()).append(',')
+                    .append(cleanCsv(race.getName())).append(',')
+                    .append(race.getStatus()).append(',')
+                    .append(race.getStartTime()).append(',')
+                    .append(race.getEndTime()).append(',')
+                    .append(raceResultRepo.findByRaceScheduleId(race.getId()).size())
+                    .append('\n');
+        }
+        return csv.toString();
+    }
+
+    private String buildRaceExcelHtml(List<RaceSchedule> races) {
+        StringBuilder html = new StringBuilder("<html><body><table><tr><th>raceId</th><th>name</th><th>status</th><th>startTime</th><th>endTime</th><th>resultCount</th></tr>");
+        for (RaceSchedule race : races) {
+            html.append("<tr><td>").append(race.getId()).append("</td><td>")
+                    .append(escapeHtml(race.getName())).append("</td><td>")
+                    .append(race.getStatus()).append("</td><td>")
+                    .append(race.getStartTime()).append("</td><td>")
+                    .append(race.getEndTime()).append("</td><td>")
+                    .append(raceResultRepo.findByRaceScheduleId(race.getId()).size())
+                    .append("</td></tr>");
+        }
+        return html.append("</table></body></html>").toString();
+    }
+
+    private List<String> buildRaceTextLines(List<RaceSchedule> races) {
+        List<String> lines = new ArrayList<>();
+        lines.add("Race export");
+        lines.add("raceId | name | status | startTime | endTime | resultCount");
+        for (RaceSchedule race : races) {
+            lines.add(race.getId() + " | " + race.getName() + " | " + race.getStatus() + " | "
+                    + race.getStartTime() + " | " + race.getEndTime() + " | "
+                    + raceResultRepo.findByRaceScheduleId(race.getId()).size());
+        }
+        return lines;
+    }
+
+    private byte[] buildSimplePdf(List<String> lines) {
+        StringBuilder text = new StringBuilder("BT /F1 10 Tf 40 780 Td ");
+        for (String line : lines) {
+            text.append('(').append(escapePdf(line)).append(") Tj 0 -16 Td ");
+        }
+        text.append("ET");
+        byte[] stream = text.toString().getBytes(StandardCharsets.UTF_8);
+        String header = "%PDF-1.4\n";
+        String obj1 = "1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n";
+        String obj2 = "2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n";
+        String obj3 = "3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >> endobj\n";
+        String obj4 = "4 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj\n";
+        String obj5Prefix = "5 0 obj << /Length " + stream.length + " >> stream\n";
+        String obj5Suffix = "\nendstream endobj\n";
+        String body = obj1 + obj2 + obj3 + obj4 + obj5Prefix + text + obj5Suffix;
+        return (header + body + "trailer << /Root 1 0 R >>\n%%EOF").getBytes(StandardCharsets.UTF_8);
+    }
+
+    private String escapeHtml(String value) {
+        if (value == null) {
+            return "";
+        }
+        return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+    }
+
+    private String escapePdf(String value) {
+        if (value == null) {
+            return "";
+        }
+        return value.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)");
     }
 
     private boolean isBlank(String value) {

@@ -69,6 +69,16 @@ public class RaceOperationsController {
         }
     }
 
+    @PostMapping("/{raceId}/inspection")
+    @PreAuthorize("hasAuthority('ROLE_RACE_REFEREE')")
+    public ResponseEntity<?> inspectRaceParticipants(@PathVariable Integer raceId, @RequestBody InspectionRequest request) {
+        try {
+            return ResponseEntity.ok(new ApiResponse<>(true, "Race participants inspected", raceUseCaseService.inspectRaceParticipants(raceId, request)));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
+    }
+
     @PostMapping("/{raceId}/reports/post-race")
     @PreAuthorize("hasAuthority('ROLE_RACE_REFEREE')")
     public ResponseEntity<?> submitPostRaceReport(@PathVariable Integer raceId, @RequestBody RaceReportRequest request) {

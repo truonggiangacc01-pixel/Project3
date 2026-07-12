@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface PaymentTransactionRepo extends JpaRepository<PaymentTransaction, Integer> {
     List<PaymentTransaction> findBySpectatorIdOrderByTransactionDateDesc(Integer spectatorId);
+    List<PaymentTransaction> findBySpectatorIdAndTransactionTypeOrderByTransactionDateDesc(Integer spectatorId, com.horseracing.project3.enums.TransactionType transactionType);
 }

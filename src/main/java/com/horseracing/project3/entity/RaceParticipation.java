@@ -4,6 +4,7 @@ import com.horseracing.project3.enums.JockeyInvitationStatus;
 import com.horseracing.project3.enums.RaceParticipationStatus;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,18 @@ public class RaceParticipation {
     @Enumerated(EnumType.STRING)
     @Column(name = "jockey_invitation_status")
     private JockeyInvitationStatus jockeyInvitationStatus;
+
+    @Column(name = "horse_ready")
+    private Boolean horseReady;
+
+    @Column(name = "jockey_ready")
+    private Boolean jockeyReady;
+
+    @Column(name = "inspection_note", columnDefinition = "NVARCHAR(MAX)")
+    private String inspectionNote;
+
+    @Column(name = "inspected_at")
+    private LocalDateTime inspectedAt;
 
     /*___________________________________________________________________________________________________________ */
 
@@ -139,6 +152,38 @@ public class RaceParticipation {
 
     public void setJockeyInvitationStatus(JockeyInvitationStatus jockeyInvitationStatus) {
         this.jockeyInvitationStatus = jockeyInvitationStatus;
+    }
+
+    public Boolean getHorseReady() {
+        return horseReady;
+    }
+
+    public void setHorseReady(Boolean horseReady) {
+        this.horseReady = horseReady;
+    }
+
+    public Boolean getJockeyReady() {
+        return jockeyReady;
+    }
+
+    public void setJockeyReady(Boolean jockeyReady) {
+        this.jockeyReady = jockeyReady;
+    }
+
+    public String getInspectionNote() {
+        return inspectionNote;
+    }
+
+    public void setInspectionNote(String inspectionNote) {
+        this.inspectionNote = inspectionNote;
+    }
+
+    public LocalDateTime getInspectedAt() {
+        return inspectedAt;
+    }
+
+    public void setInspectedAt(LocalDateTime inspectedAt) {
+        this.inspectedAt = inspectedAt;
     }
 
     /*___________________________________________________________________________________________________________ */
