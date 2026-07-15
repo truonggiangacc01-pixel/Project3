@@ -6,5 +6,6 @@ public enum PredictionStatus {
     PENDING,
     WON,
     LOST,
+    REFUNDED,
     REFUNED
 }
