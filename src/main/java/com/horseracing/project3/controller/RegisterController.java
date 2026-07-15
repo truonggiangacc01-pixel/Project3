@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "*")
-@Tag(name = "API Register")
+@Tag(name = "API Register Kiểm thử thành công")
 public class RegisterController {
 
     @Autowired
@@ -37,5 +38,14 @@ public class RegisterController {
             return ResponseEntity.badRequest().body(new RegisterResponse(false, e.getMessage()));
 
         }
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        String errorMessage = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", false);
+        response.put("message", errorMessage);
+        return ResponseEntity.badRequest().body(response);
     }
 }

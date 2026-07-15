@@ -91,4 +91,8 @@ public class HorseService {
         // Return empty list if horse exists but has no races (Alternative Flow 1a)
         return raceResultRepo.findByHorseId(horseId);
     }
+
+    public List<Horse> getAllHorses() {
+        return horseRepo.findAll();
+    }
 }

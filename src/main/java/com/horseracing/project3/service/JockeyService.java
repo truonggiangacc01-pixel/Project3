@@ -40,4 +40,14 @@ public class JockeyService {
 
         return new ApiResponse<>(true, message, jockey);
     }
+    public ApiResponse<Jockey> updateLicense(Integer jockeyId, String licenseNumber, LocalDate licenseExpiryDate) {
+        if (licenseExpiryDate != null && licenseExpiryDate.isBefore(LocalDate.now())) {
+            throw new RuntimeException("Không được nhập ngày trong quá khứ");
+        }
+        Jockey jockey = jockeyRepo.findById(jockeyId).orElseThrow(() -> new RuntimeException("Jockey not found"));
+        jockey.setLicenseNumber(licenseNumber);
+        jockey.setLicenseExpiryDate(licenseExpiryDate);
+        jockeyRepo.save(jockey);
+        return new ApiResponse<>(true, "Cập nhật giấy phép thành công", jockey);
+    }
 }

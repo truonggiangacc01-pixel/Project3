@@ -41,6 +41,7 @@ public class AuthService {
         // 1. Check Admin
         Optional<Admin> adminOpt = adminRepo.findByEmail(email);
         if (adminOpt.isPresent()) {
+            verifyStatus(adminOpt.get().getAccountStatus());
             if (passwordEncoder.matches(rawPassword, adminOpt.get().getPassword())) {
                 String token = jwtService.generateToken(email, UserRole.ADMIN);
                 return new LoginResponse(true, "Đăng nhập Admin thành công", adminOpt.get().getFullName(), UserRole.ADMIN, token);
@@ -51,6 +52,7 @@ public class AuthService {
         // 2. Check Spectator (Khán giả không cần kiểm tra trạng thái phê duyệt)
         Optional<Spectator> specOpt = spectatorRepo.findByEmail(email);
         if (specOpt.isPresent()) {
+            verifyStatus(specOpt.get().getAccountStatus());
             if (passwordEncoder.matches(rawPassword, specOpt.get().getPassword())) {
                 String token = jwtService.generateToken(email, UserRole.SPECTATOR);
                 return new LoginResponse(true, "Đăng nhập Khán giả thành công", specOpt.get().getFullName(), UserRole.SPECTATOR, token);
@@ -100,8 +102,9 @@ public class AuthService {
         if (status == AccountStatus.PENDING) {
             throw new RuntimeException("Tài khoản của bạn đang chờ Admin phê duyệt, chưa thể đăng nhập!");
         }
-        // Nếu sau này bạn có thêm status LOCKED thì thêm điều kiện:
-        // if (status == AccountStatus.LOCKED) { throw new RuntimeException("Tài khoản đã bị khóa!"); }
+        if (status == AccountStatus.LOCKED) {
+            throw new RuntimeException("Tài khoản của bạn đã bị khóa!");
+        }
     }
 
     private boolean isEmailExists(String email) {
