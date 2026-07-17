@@ -29,6 +29,15 @@ public class HorseService {
     }
 
     public Horse addHorse(Horse newHorse, String ownerEmail) {
+        if (newHorse.getName() == null || newHorse.getName().trim().length() < 4) {
+            throw new RuntimeException("Tên ngựa phải có ít nhất 4 ký tự");
+        }
+        if (newHorse.getBreed() == null || newHorse.getBreed().trim().length() < 4) {
+            throw new RuntimeException("Giống ngựa phải có ít nhất 4 ký tự");
+        }
+        if (newHorse.getBreed().matches(".*\\d.*")) {
+            throw new RuntimeException("Giống ngựa chỉ chấp nhận chữ cái");
+        }
         if (horseRepo.existsByName(newHorse.getName())) {
             throw new RuntimeException("Tên ngựa này đã được dùng, vui lòng đặt tên khác");
         }
@@ -66,6 +75,16 @@ public class HorseService {
             if (horseRepo.existsByName(updatedHorseData.getName())) {
                 throw new RuntimeException("Tên ngựa này đã được dùng, vui lòng đặt tên khác");
             }
+        }
+        
+        if (updatedHorseData.getName() == null || updatedHorseData.getName().trim().length() < 4) {
+            throw new RuntimeException("Tên ngựa phải có ít nhất 4 ký tự");
+        }
+        if (updatedHorseData.getBreed() == null || updatedHorseData.getBreed().trim().length() < 4) {
+            throw new RuntimeException("Giống ngựa phải có ít nhất 4 ký tự");
+        }
+        if (updatedHorseData.getBreed().matches(".*\\d.*")) {
+            throw new RuntimeException("Giống ngựa chỉ chấp nhận chữ cái");
         }
 
         existingHorse.setName(updatedHorseData.getName());

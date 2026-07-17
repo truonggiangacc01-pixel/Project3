@@ -131,16 +131,16 @@ public class DataInitializer implements CommandLineRunner {
 
         /*___________________________________________________________________________________________________________ */
         //                                                  RACE REFEREE
-        RaceReferee ref1 = new RaceReferee("Lương Công Bằng", "BangLCB", "congbang.ref@mail.com", "0911112233", "RaRe123", LocalDate.of(1972, 3, 14), 4, "Quốc tế");
-        RaceReferee ref2 = new RaceReferee("Trịnh Chính Trực", "TrucTCT", "chinhtruc.ref@mail.com", "0912223344", "RaRe123", LocalDate.of(1975, 8, 28), 8, "Quốc tế");
-        RaceReferee ref3 = new RaceReferee("Tạ Khách Quan", "QuanTKQ", "khachquan.ref@mail.com", "0913334455", "RaRe123", LocalDate.of(1979, 11, 5), 3, "Quốc tế");
-        RaceReferee ref4 = new RaceReferee("Võ Minh Bạch", "AchVMB", "minhbach.ref@mail.com", "0914445566", "RaRe123", LocalDate.of(1981, 1, 22), 10, "Quốc tế");
-        RaceReferee ref5 = new RaceReferee("Đào Công Tâm", "AmĐCT", "congtam.ref@mail.com", "0915556677", "RaRe123", LocalDate.of(1984, 10, 9), 6, "Quốc tế");
-        RaceReferee ref6 = new RaceReferee("Phan Trung Lập", "LapPTL", "trunglap.ref@mail.com", "0916667788", "RaRe123", LocalDate.of(1986, 12, 31), 5, "Quốc tế");
-        RaceReferee ref7 = new RaceReferee("Bùi Đức Minh", "InhBĐM", "duicminh.ref@mail.com", "0917778899", "RaRe123", LocalDate.of(1988, 4, 12), 9, "Quốc tế");
-        RaceReferee ref8 = new RaceReferee("Đoàn Quang Sang", "SangĐQS", "quangsang.ref@mail.com", "0918889900", "RaRe123", LocalDate.of(1989, 6, 3), 2, "Quốc tế");
-        RaceReferee ref9 = new RaceReferee("Chu Uy Nghiêm", "IemCUN", "uynghiem.ref@mail.com", "0919990011", "RaRe123", LocalDate.of(1990, 9, 25), 4, "Quốc tế");
-        RaceReferee ref10 = new RaceReferee("Lâm Quyết Đoán", "DoanLQĐ", "quyetdoan.ref@mail.com", "0911001122", "RaRe123", LocalDate.of(1991, 9, 25), 8, "Quốc tế");
+        RaceReferee ref1 = new RaceReferee("Lương Công Bằng", "BangLCB", "congbang.ref@mail.com", "0911112233", "ref123", LocalDate.of(1972, 3, 14), 4, "Quốc tế");
+        RaceReferee ref2 = new RaceReferee("Trịnh Chính Trực", "TrucTCT", "chinhtruc.ref@mail.com", "0912223344", "ref123", LocalDate.of(1975, 8, 28), 8, "Quốc tế");
+        RaceReferee ref3 = new RaceReferee("Tạ Khách Quan", "QuanTKQ", "khachquan.ref@mail.com", "0913334455", "ref123", LocalDate.of(1979, 11, 5), 3, "Quốc tế");
+        RaceReferee ref4 = new RaceReferee("Võ Minh Bạch", "AchVMB", "minhbach.ref@mail.com", "0914445566", "ref123", LocalDate.of(1981, 1, 22), 10, "Quốc tế");
+        RaceReferee ref5 = new RaceReferee("Đào Công Tâm", "AmĐCT", "congtam.ref@mail.com", "0915556677", "ref123", LocalDate.of(1984, 10, 9), 6, "Quốc tế");
+        RaceReferee ref6 = new RaceReferee("Phan Trung Lập", "LapPTL", "trunglap.ref@mail.com", "0916667788", "ref123", LocalDate.of(1986, 12, 31), 5, "Quốc tế");
+        RaceReferee ref7 = new RaceReferee("Bùi Đức Minh", "InhBĐM", "duicminh.ref@mail.com", "0917778899", "ref123", LocalDate.of(1988, 4, 12), 9, "Quốc tế");
+        RaceReferee ref8 = new RaceReferee("Đoàn Quang Sang", "SangĐQS", "quangsang.ref@mail.com", "0918889900", "ref123", LocalDate.of(1989, 6, 3), 2, "Quốc tế");
+        RaceReferee ref9 = new RaceReferee("Chu Uy Nghiêm", "IemCUN", "uynghiem.ref@mail.com", "0919990011", "ref123", LocalDate.of(1990, 9, 25), 4, "Quốc tế");
+        RaceReferee ref10 = new RaceReferee("Lâm Quyết Đoán", "DoanLQĐ", "quyetdoan.ref@mail.com", "0911001122", "ref123", LocalDate.of(1991, 9, 25), 8, "Quốc tế");
 
         /*___________________________________________________________________________________________________________ */
         //                                                  HORSE

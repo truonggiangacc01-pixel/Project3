@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import java.time.LocalDate;
 
-public class JockeyProfileUpdateRequest {
+public class RefereeProfileUpdateRequest {
 
     @NotBlank(message = "Full name cannot be blank")
     private String fullName;
@@ -16,15 +16,6 @@ public class JockeyProfileUpdateRequest {
     private LocalDate birthDate;
 
     private Integer experienceYears;
-
-    @NotBlank(message = "License number cannot be blank")
-    private String licenseNumber;
-
-    private LocalDate licenseExpiryDate;
-
-    private String userName;
-
-    // Getters and Setters
 
     public String getFullName() {
         return fullName;
@@ -56,29 +47,5 @@ public class JockeyProfileUpdateRequest {
 
     public void setExperienceYears(Integer experienceYears) {
         this.experienceYears = experienceYears;
-    }
-
-    public String getLicenseNumber() {
-        return licenseNumber;
-    }
-
-    public void setLicenseNumber(String licenseNumber) {
-        this.licenseNumber = licenseNumber;
-    }
-
-    public LocalDate getLicenseExpiryDate() {
-        return licenseExpiryDate;
-    }
-
-    public void setLicenseExpiryDate(LocalDate licenseExpiryDate) {
-        this.licenseExpiryDate = licenseExpiryDate;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 }
