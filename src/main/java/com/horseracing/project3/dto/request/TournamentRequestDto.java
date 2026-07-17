@@ -7,9 +7,11 @@ import java.time.LocalDate;
 public class TournamentRequestDto {
 
     @NotBlank(message = "Tên giải đấu không được để trống")
+    @jakarta.validation.constraints.Size(min = 4, message = "Tên giải đấu phải có ít nhất 4 ký tự")
     private String name;
 
     @NotBlank(message = "Địa điểm không được để trống")
+    @jakarta.validation.constraints.Size(min = 4, message = "Địa điểm phải có ít nhất 4 ký tự")
     private String location;
 
     @NotNull(message = "Ngày bắt đầu không được để trống")

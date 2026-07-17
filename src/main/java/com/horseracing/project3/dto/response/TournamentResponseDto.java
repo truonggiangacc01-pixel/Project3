@@ -8,7 +8,8 @@ public class TournamentResponseDto {
     private String location;
     private LocalDate startDate;
     private LocalDate endDate;
-    // Assuming Admin ID or name could be returned as well, but keeping it simple for now.
+    private String status;
+    private Integer racesCount;
 
     public TournamentResponseDto() {
     }
@@ -61,5 +62,21 @@ public class TournamentResponseDto {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Integer getRacesCount() {
+        return racesCount;
+    }
+
+    public void setRacesCount(Integer racesCount) {
+        this.racesCount = racesCount;
     }
 }

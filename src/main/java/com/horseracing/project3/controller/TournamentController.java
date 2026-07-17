@@ -18,11 +18,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/tournaments")
 @CrossOrigin(origins = "*")
-@Tag(name = "API Tournaments")
+@Tag(name = "API Tournaments Kiểm thử thành công")
 public class TournamentController {
 
     @Autowired
     private TournamentService tournamentService;
+
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getAllTournaments() {
+        try {
+            return ResponseEntity.ok(tournamentService.getAllTournaments());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi hệ thống: " + e.getMessage());
+        }
+    }
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')") // or hasRole('ADMIN') depending on how GrantedAuthority is set up. We'll check roles from JWT or assume hasAuthority('ROLE_ADMIN')

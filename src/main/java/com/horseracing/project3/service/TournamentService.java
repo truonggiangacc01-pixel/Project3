@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class TournamentService {
 
@@ -23,11 +26,31 @@ public class TournamentService {
     @Autowired
     private AdminRepo adminRepo;
 
+    @Transactional(readOnly = true)
+    public List<TournamentResponseDto> getAllTournaments() {
+        return tournamentRepo.findAll().stream().map(t -> {
+            TournamentResponseDto dto = new TournamentResponseDto(
+                    t.getId(),
+                    t.getName(),
+                    t.getLocation(),
+                    t.getStartDate(),
+                    t.getEndDate()
+            );
+            dto.setStatus(t.getStatus() != null ? t.getStatus().name() : null);
+            int count = (t.getRaceScheduleList() != null) ? t.getRaceScheduleList().size() : 0;
+            dto.setRacesCount(count);
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
     @Transactional
     public TournamentResponseDto createTournament(TournamentRequestDto requestDto, String adminEmail) {
         // Validate date
         if (requestDto.getStartDate().isBefore(java.time.LocalDate.now())) {
-            throw new IllegalArgumentException("Ngày bắt đầu không được trong quá khứ");
+            throw new IllegalArgumentException("Ngày bắt đầu giải đấu không được phép diễn ra trước ngày tạo mới giải đấu");
+        }
+        if (requestDto.getEndDate().isBefore(java.time.LocalDate.now())) {
+            throw new IllegalArgumentException("Ngày kết thúc giải đấu không được phép diễn ra trước ngày tạo mới giải đấu");
         }
         if (requestDto.getStartDate().isAfter(requestDto.getEndDate())) {
             throw new IllegalArgumentException("Ngày bắt đầu không được lớn hơn ngày kết thúc");
@@ -80,7 +103,10 @@ public class TournamentService {
             // Allow full update
             if (requestDto.getStartDate() != null && requestDto.getEndDate() != null) {
                  if (requestDto.getStartDate().isBefore(java.time.LocalDate.now())) {
-                     throw new IllegalArgumentException("Ngày bắt đầu không được trong quá khứ");
+                     throw new IllegalArgumentException("Ngày bắt đầu giải đấu không được phép diễn ra trước ngày tạo mới giải đấu");
+                 }
+                 if (requestDto.getEndDate().isBefore(java.time.LocalDate.now())) {
+                     throw new IllegalArgumentException("Ngày kết thúc giải đấu không được phép diễn ra trước ngày tạo mới giải đấu");
                  }
                  if (requestDto.getStartDate().isAfter(requestDto.getEndDate())) {
                      throw new IllegalArgumentException("Ngày bắt đầu không được lớn hơn ngày kết thúc");
@@ -154,7 +180,11 @@ public class TournamentService {
         }
 
         if (requestDto.getRegistrationStartDate().isAfter(requestDto.getRegistrationEndDate())) {
-            throw new IllegalArgumentException("Thời gian bắt đầu đăng ký không được lớn hơn thời gian kết thúc");
+            throw new IllegalArgumentException("Ngày đóng đăng ký không được diễn ra trước ngày mở đăng ký");
+        }
+
+        if (requestDto.getRegistrationEndDate().toLocalDate().isAfter(tournament.getStartDate())) {
+            throw new IllegalArgumentException("Ngày đóng đăng ký không được vượt quá ngày bắt đầu giải đấu");
         }
 
         if (tournament.getRaceScheduleList() == null || tournament.getRaceScheduleList().isEmpty()) {
