@@ -193,7 +193,12 @@ public class TournamentService {
 
         tournament.setRegistrationStartDate(requestDto.getRegistrationStartDate());
         tournament.setRegistrationEndDate(requestDto.getRegistrationEndDate());
-        tournament.setRegistrationOpen(true);
+        
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+        boolean isOpenNow = !now.isBefore(requestDto.getRegistrationStartDate()) 
+                         && !now.isAfter(requestDto.getRegistrationEndDate());
+        tournament.setRegistrationOpen(isOpenNow);
+        
         tournamentRepo.save(tournament);
     }
 }

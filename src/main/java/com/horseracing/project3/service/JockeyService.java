@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import com.horseracing.project3.dto.request.JockeyProfileUpdateRequest;
 import com.horseracing.project3.dto.response.ApiResponse;
 
@@ -17,6 +18,10 @@ public class JockeyService {
 
     public void saveJockey(Jockey jockey) {
         jockeyRepo.save(jockey);
+    }
+
+    public List<Jockey> getAllJockeys() {
+        return jockeyRepo.findAll();
     }
 
     public ApiResponse<Jockey> updateJockeyProfile(Integer jockeyId, JockeyProfileUpdateRequest request) {

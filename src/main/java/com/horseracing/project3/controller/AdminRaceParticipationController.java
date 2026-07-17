@@ -17,6 +17,15 @@ public class AdminRaceParticipationController {
     @Autowired
     private RaceParticipationService raceParticipationService;
 
+    @GetMapping
+    public ResponseEntity<?> getAllParticipations() {
+        try {
+            return new ResponseEntity<>(raceParticipationService.getAllParticipations(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PutMapping("/{participationId}/approve")
     public ResponseEntity<?> approveParticipation(@PathVariable Integer participationId) {
         try {

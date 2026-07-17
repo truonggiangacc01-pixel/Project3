@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/tournaments/{tournamentId}/race-schedules")
 @CrossOrigin(origins = "*")
-@Tag(name = "API Race Schedule")
+@Tag(name = "API Race Schedule Kiểm thử thành công")
 public class RaceScheduleController {
 
     @Autowired

@@ -242,31 +242,31 @@ public class DataInitializer implements CommandLineRunner {
         
         RaceSchedule rs6 = new RaceSchedule("Chung kết Thu 2026",
                 LocalDate.of(2026, 8, 24), "Trường đua Sóc Sơn",
-                null, RaceScheduleStatus.PENDING,
+                null, RaceScheduleStatus.SCHEDULED,
                 LocalDateTime.of(2026, 8, 24, 15, 0, 0),
                 LocalDateTime.of(2026, 8, 24, 17, 0, 0));
         
         RaceSchedule rs7 = new RaceSchedule("Chung kết Đông 2026",
                 LocalDate.of(2026, 11, 9), "Trường đua Đại Nam",
-                null, RaceScheduleStatus.PENDING,
+                null, RaceScheduleStatus.SCHEDULED,
                 LocalDateTime.of(2026, 11, 9, 15, 0, 0),
                 LocalDateTime.of(2026, 11, 9, 17, 0, 0));
         
         RaceSchedule rs8 = new RaceSchedule("Bán kết Quốc gia 2026 lần 1",
                 LocalDate.of(2026, 12, 22), "Trường đua Phú Thọ",
-                null, RaceScheduleStatus.PENDING,
+                null, RaceScheduleStatus.SCHEDULED,
                 LocalDateTime.of(2026, 12, 22, 15, 0, 0),
                 LocalDateTime.of(2026, 12, 22, 17, 0, 0));
         
         RaceSchedule rs9 = new RaceSchedule("Bán kết Quốc gia 2026 lần 2",
                 LocalDate.of(2026, 12, 23), "Trường đua Phú Thọ",
-                null, RaceScheduleStatus.PENDING,
+                null, RaceScheduleStatus.SCHEDULED,
                 LocalDateTime.of(2026, 12, 23, 15, 0, 0),
                 LocalDateTime.of(2026, 12, 23, 17, 0, 0));
         
         RaceSchedule rs10 = new RaceSchedule("Chung kết Quốc gia 2026",
                 LocalDate.of(2026, 12, 24), "Trường đua Phú Thọ",
-                null, RaceScheduleStatus.PENDING,
+                null, RaceScheduleStatus.SCHEDULED,
                 LocalDateTime.of(2026, 12, 24, 15, 0, 0),
                 LocalDateTime.of(2026, 12, 24, 17, 0, 0));
 

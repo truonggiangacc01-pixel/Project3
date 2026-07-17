@@ -20,6 +20,16 @@ public class RaceParticipationController {
     @Autowired
     private RaceParticipationService raceParticipationService;
 
+    @GetMapping
+    public ResponseEntity<?> getMyParticipations(Authentication authentication) {
+        try {
+            String email = authentication.getName();
+            return new ResponseEntity<>(raceParticipationService.getParticipationsByOwner(email), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/register-horse")
     public ResponseEntity<?> registerHorse(@RequestBody RegisterHorseRequest request, Authentication authentication) {
         try {

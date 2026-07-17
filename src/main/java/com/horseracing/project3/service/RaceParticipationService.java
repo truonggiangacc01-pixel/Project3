@@ -35,6 +35,18 @@ public class RaceParticipationService {
         raceParticipationRepo.save(raceparticipation);
     }
 
+    public List<RaceParticipation> getParticipationsByOwner(String email) {
+        return raceParticipationRepo.findByHorseHorseOwnerEmail(email);
+    }
+
+    public List<RaceParticipation> getInvitationsForJockey(String email) {
+        return raceParticipationRepo.findByJockeyEmail(email);
+    }
+
+    public List<RaceParticipation> getAllParticipations() {
+        return raceParticipationRepo.findAll();
+    }
+
     public RaceParticipation registerHorse(RegisterHorseRequest request, String ownerEmail) {
         Horse horse = horseRepo.findById(request.getHorseId())
                 .orElseThrow(() -> new RuntimeException("Horse not found"));
@@ -67,7 +79,30 @@ public class RaceParticipationService {
             throw new RuntimeException("Registration has already ended");
         }
 
-        if (raceParticipationRepo.existsByHorseIdAndRaceScheduleId(horse.getId(), schedule.getId())) {
+        java.util.Optional<RaceParticipation> existingOpt = raceParticipationRepo.findByHorseIdAndRaceScheduleId(horse.getId(), schedule.getId());
+        if (existingOpt.isPresent()) {
+            RaceParticipation existing = existingOpt.get();
+            if (existing.getStatus() == RaceParticipationStatus.CONFIRMED) {
+                throw new RuntimeException("Horse is already registered and confirmed for this race schedule");
+            }
+            if (existing.getStatus() == RaceParticipationStatus.PENDING) {
+                if (existing.getJockeyInvitationStatus() == JockeyInvitationStatus.PENDING || existing.getJockeyInvitationStatus() == JockeyInvitationStatus.ACCEPTED) {
+                    throw new RuntimeException("Horse is already registered and waiting for approval");
+                }
+                if (existing.getJockeyInvitationStatus() == JockeyInvitationStatus.REJECTED) {
+                    // Jockey rejected. Owner is re-registering to pick a new jockey.
+                    existing.setJockey(null);
+                    existing.setJockeyInvitationStatus(null);
+                    return raceParticipationRepo.save(existing);
+                }
+            }
+            if (existing.getStatus() == RaceParticipationStatus.REJECTED) {
+                // Admin rejected. Owner is trying again.
+                existing.setStatus(RaceParticipationStatus.PENDING);
+                existing.setJockey(null);
+                existing.setJockeyInvitationStatus(null);
+                return raceParticipationRepo.save(existing);
+            }
             throw new RuntimeException("Horse is already registered for this race schedule");
         }
 
@@ -87,8 +122,8 @@ public class RaceParticipationService {
             throw new RuntimeException("You do not own the horse in this registration");
         }
 
-        if (participation.getStatus() != RaceParticipationStatus.CONFIRMED) {
-            throw new RuntimeException("Registration must be CONFIRMED before assigning a jockey");
+        if (participation.getStatus() != RaceParticipationStatus.CONFIRMED && participation.getStatus() != RaceParticipationStatus.PENDING) {
+            throw new RuntimeException("Registration must be PENDING or CONFIRMED before assigning a jockey");
         }
 
         Jockey jockey = jockeyRepo.findById(request.getJockeyId())
@@ -113,12 +148,37 @@ public class RaceParticipationService {
         return raceParticipationRepo.save(participation);
     }
 
+    public RaceParticipation respondToInvitation(Integer participationId, boolean isAccepted, String jockeyEmail) {
+        RaceParticipation participation = raceParticipationRepo.findById(participationId)
+                .orElseThrow(() -> new RuntimeException("RaceParticipation not found"));
+
+        if (participation.getJockey() == null || !participation.getJockey().getEmail().equals(jockeyEmail)) {
+            throw new RuntimeException("You are not the invited jockey for this participation");
+        }
+
+        if (participation.getJockeyInvitationStatus() != JockeyInvitationStatus.PENDING) {
+            throw new RuntimeException("Invitation is no longer pending");
+        }
+
+        if (isAccepted) {
+            participation.setJockeyInvitationStatus(JockeyInvitationStatus.ACCEPTED);
+        } else {
+            participation.setJockeyInvitationStatus(JockeyInvitationStatus.REJECTED);
+        }
+
+        return raceParticipationRepo.save(participation);
+    }
+
     public RaceParticipation approveParticipation(Integer participationId) {
         RaceParticipation participation = raceParticipationRepo.findById(participationId)
                 .orElseThrow(() -> new RuntimeException("RaceParticipation not found"));
 
         if (participation.getStatus() != RaceParticipationStatus.PENDING) {
             throw new com.horseracing.project3.exception.InvalidStatusTransitionException("Only PENDING participation can be APPROVED (CONFIRMED). Current status: " + participation.getStatus());
+        }
+
+        if (participation.getJockey() == null || participation.getJockeyInvitationStatus() != JockeyInvitationStatus.ACCEPTED) {
+            throw new RuntimeException("Cannot approve. Jockey has not accepted yet.");
         }
 
         participation.setStatus(RaceParticipationStatus.CONFIRMED);
