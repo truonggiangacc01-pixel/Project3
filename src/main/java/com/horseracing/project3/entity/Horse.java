@@ -32,6 +32,7 @@ public class Horse {
 
     //MAPPING MỐI QUAN HỆ 1-N (Horse - RaceParticipation)
     //1 HORSE --< có nhiều RaceParticipation - List<RaceParticipation>
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "horse", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RaceParticipation> raceParticipationList = new ArrayList<>();
 
@@ -49,6 +50,7 @@ public class Horse {
 
     //MAPPING MỐI QUAN HỆ 1-N (Horse - Prediction)
     //1 HORSE --< có nhiều Prediction - List<Prediction>
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "horse", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Prediction> predictionList = new ArrayList<>();
 
@@ -68,6 +70,7 @@ public class Horse {
     //1, N HorswOwner bất kỳ phải thuộc về 1 Horse
     @ManyToOne
     @JoinColumn(name = "HorseOwnerId")
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"horseList", "notificationList", "password"})
     private HorseOwner horseOwner;
 
     public HorseOwner getHorseOwner() {

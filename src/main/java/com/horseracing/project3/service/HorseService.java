@@ -2,6 +2,7 @@ package com.horseracing.project3.service;
 
 import com.horseracing.project3.entity.Horse;
 import com.horseracing.project3.entity.HorseOwner;
+import com.horseracing.project3.enums.HorseHealthStatus;
 import com.horseracing.project3.enums.RaceParticipationStatus;
 import com.horseracing.project3.repository.HorseOwnerRepo;
 import com.horseracing.project3.repository.HorseRepo;
@@ -35,6 +36,10 @@ public class HorseService {
 
         HorseOwner owner = horseOwnerRepo.findByEmail(ownerEmail)
                 .orElseThrow(() -> new RuntimeException("Owner not found"));
+
+        if (newHorse.getHealthStatus() == null) {
+            newHorse.setHealthStatus(HorseHealthStatus.ELIGIBLE);
+        }
         
         newHorse.setHorseOwner(owner);
         owner.addHorse(newHorse);
