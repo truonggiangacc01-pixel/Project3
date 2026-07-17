@@ -77,6 +77,22 @@ public class AccountManagementService {
         if (req.getPassword() == null || req.getPassword().isEmpty()) {
             req.setPassword("Password@123"); // Default password if not provided
         }
+
+        if (req.getFullName() == null || req.getFullName().trim().length() < 4) {
+            throw new RuntimeException("Họ và tên phải có ít nhất 4 ký tự");
+        }
+        if (req.getPhone() == null || !req.getPhone().matches("^0\\d{9}$")) {
+            throw new RuntimeException("số điện thoại chưa đúng định dạng");
+        }
+        if (req.getBirthDate() != null) {
+            if (req.getBirthDate().isAfter(java.time.LocalDate.now())) {
+                throw new RuntimeException("ngày sinh không được phép diễn ra sau ngày thực hiện thao tác thay đổi");
+            }
+            int age = java.time.LocalDate.now().getYear() - req.getBirthDate().getYear();
+            if (age < 18) {
+                throw new RuntimeException("Phải đủ 18 tuổi trở lên");
+            }
+        }
         
         validateEmailAndUsername(req.getEmail(), req.getUserName());
         String encodedPassword = passwordEncoder.encode(req.getPassword());
@@ -119,6 +135,22 @@ public class AccountManagementService {
 
     @Transactional
     public UserAccountResponse updateAccount(UserRole role, Integer id, UpdateAccountRequest req) {
+        if (req.getFullName() == null || req.getFullName().trim().length() < 4) {
+            throw new RuntimeException("Họ và tên phải có ít nhất 4 ký tự");
+        }
+        if (req.getPhone() == null || !req.getPhone().matches("^0\\d{9}$")) {
+            throw new RuntimeException("số điện thoại chưa đúng định dạng");
+        }
+        if (req.getBirthDate() != null) {
+            if (req.getBirthDate().isAfter(java.time.LocalDate.now())) {
+                throw new RuntimeException("ngày sinh không được phép diễn ra sau ngày thực hiện thao tác thay đổi");
+            }
+            int age = java.time.LocalDate.now().getYear() - req.getBirthDate().getYear();
+            if (age < 18) {
+                throw new RuntimeException("Phải đủ 18 tuổi trở lên");
+            }
+        }
+
         switch (role) {
             case ADMIN:
                 Admin admin = adminRepo.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy Admin"));
@@ -257,7 +289,12 @@ public class AccountManagementService {
                 // Cannot delete active accounts
                 throw new RuntimeException("Tài khoản đang hoạt động, không thể xóa!");
             case SPECTATOR:
-                throw new RuntimeException("Tài khoản đang hoạt động, không thể xóa!");
+                Spectator spectator = spectatorRepo.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy"));
+                if (spectator.getAccountStatus() == AccountStatus.APPROVED) {
+                    throw new RuntimeException("Tài khoản đang hoạt động, không thể xóa!");
+                }
+                spectatorRepo.delete(spectator);
+                break;
             case HORSE_OWNER:
                 HorseOwner owner = horseOwnerRepo.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy"));
                 if (owner.getAccountStatus() == AccountStatus.APPROVED) {

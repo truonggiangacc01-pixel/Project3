@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/horses")
 @CrossOrigin(origins = "*")
-@Tag(name = "API Horse Search UC-35")
+@Tag(name = "API Horse Search UC-35 Kiểm thử thành công")
 public class HorseSearchController {
 
     @Autowired

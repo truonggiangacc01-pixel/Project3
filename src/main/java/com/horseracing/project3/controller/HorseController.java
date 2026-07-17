@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/horses")
 @CrossOrigin(origins = "*")
-@Tag(name = "API Public Horse (History)")
+@Tag(name = "API Public Horse (History) Kiểm thử thành công")
 public class HorseController {
 
     @Autowired
