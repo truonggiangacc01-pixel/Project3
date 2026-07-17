@@ -92,6 +92,9 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        if (adminRepo.count() > 0 || spectatorRepo.count() > 0 || horseOwnerRepo.count() > 0) {
+            return;
+        }
 
         /*___________________________________________________________________________________________________________ */
         //                                                  ADMIN
