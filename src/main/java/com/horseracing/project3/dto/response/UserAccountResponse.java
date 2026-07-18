@@ -12,10 +12,14 @@ public class UserAccountResponse {
     private UserRole role;
     private String status;
     private LocalDate birthDate;
+    private String address;
+    private Integer experienceYears;
+    private String licenseNumber;
+    private String certificateLevel;
 
     public UserAccountResponse() {}
 
-    public UserAccountResponse(Integer id, String fullName, String userName, String email, String phone, UserRole role, String status, LocalDate birthDate) {
+    public UserAccountResponse(Integer id, String fullName, String userName, String email, String phone, UserRole role, String status, LocalDate birthDate, String address, Integer experienceYears, String licenseNumber, String certificateLevel) {
         this.id = id;
         this.fullName = fullName;
         this.userName = userName;
@@ -24,6 +28,10 @@ public class UserAccountResponse {
         this.role = role;
         this.status = status;
         this.birthDate = birthDate;
+        this.address = address;
+        this.experienceYears = experienceYears;
+        this.licenseNumber = licenseNumber;
+        this.certificateLevel = certificateLevel;
     }
 
     public Integer getId() {
@@ -88,5 +96,37 @@ public class UserAccountResponse {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Integer getExperienceYears() {
+        return experienceYears;
+    }
+
+    public void setExperienceYears(Integer experienceYears) {
+        this.experienceYears = experienceYears;
+    }
+
+    public String getLicenseNumber() {
+        return licenseNumber;
+    }
+
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
+    }
+
+    public String getCertificateLevel() {
+        return certificateLevel;
+    }
+
+    public void setCertificateLevel(String certificateLevel) {
+        this.certificateLevel = certificateLevel;
     }
 }

@@ -72,13 +72,16 @@ public class TournamentService {
         Tournament savedTournament = tournamentRepo.save(tournament);
 
         // Create response
-        return new TournamentResponseDto(
+        TournamentResponseDto responseDto = new TournamentResponseDto(
                 savedTournament.getId(),
                 savedTournament.getName(),
                 savedTournament.getLocation(),
                 savedTournament.getStartDate(),
                 savedTournament.getEndDate()
         );
+        responseDto.setStatus(savedTournament.getStatus() != null ? savedTournament.getStatus().name() : null);
+        responseDto.setRacesCount((savedTournament.getRaceScheduleList() != null) ? savedTournament.getRaceScheduleList().size() : 0);
+        return responseDto;
     }
     public Tournament saveTournament(Tournament tournament) {
         return tournamentRepo.save(tournament);
@@ -135,13 +138,16 @@ public class TournamentService {
         }
 
         Tournament savedTournament = tournamentRepo.save(tournament);
-        return new TournamentResponseDto(
+        TournamentResponseDto responseDto = new TournamentResponseDto(
                 savedTournament.getId(),
                 savedTournament.getName(),
                 savedTournament.getLocation(),
                 savedTournament.getStartDate(),
                 savedTournament.getEndDate()
         );
+        responseDto.setStatus(savedTournament.getStatus() != null ? savedTournament.getStatus().name() : null);
+        responseDto.setRacesCount((savedTournament.getRaceScheduleList() != null) ? savedTournament.getRaceScheduleList().size() : 0);
+        return responseDto;
     }
 
     @Transactional

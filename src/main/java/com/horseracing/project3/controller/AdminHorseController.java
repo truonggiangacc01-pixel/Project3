@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +24,36 @@ public class AdminHorseController {
         try {
             List<Horse> horses = horseService.getAllHorses();
             return new ResponseEntity<>(horses, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createHorse(@RequestBody Horse horse) {
+        try {
+            Horse savedHorse = horseService.addHorseAdmin(horse);
+            return new ResponseEntity<>(savedHorse, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateHorseAdmin(@PathVariable Integer id, @RequestBody Horse horseData) {
+        try {
+            Horse updatedHorse = horseService.updateHorseAdmin(id, horseData);
+            return ResponseEntity.ok(updatedHorse);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteHorseAdmin(@PathVariable Integer id) {
+        try {
+            horseService.deleteHorseAdmin(id);
+            return ResponseEntity.ok("Deleted successfully");
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

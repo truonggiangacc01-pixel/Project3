@@ -52,4 +52,15 @@ public class OwnerHorseController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/{horseId}")
+    public ResponseEntity<?> deleteHorse(@PathVariable Integer horseId, Authentication authentication) {
+        try {
+            String email = authentication.getName();
+            horseService.deleteHorseOwner(horseId, email);
+            return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

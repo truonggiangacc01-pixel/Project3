@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/admin/race-participations")
 @CrossOrigin(origins = "*")
-@Tag(name = "API Race Participation for Admin")
+@Tag(name = "API Race Participation for Admin Kiểm thử thành công")
 public class AdminRaceParticipationController {
 
     @Autowired

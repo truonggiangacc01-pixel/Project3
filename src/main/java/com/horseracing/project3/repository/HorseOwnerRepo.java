@@ -13,4 +13,5 @@ public interface HorseOwnerRepo extends JpaRepository<HorseOwner, Integer> {
     boolean existsByUserName(String userName);
     Optional<HorseOwner> findByUserName(String userName);
     Optional<HorseOwner> findByEmail(String email);
+    Optional<HorseOwner> findFirstByFullName(String fullName);
 }
