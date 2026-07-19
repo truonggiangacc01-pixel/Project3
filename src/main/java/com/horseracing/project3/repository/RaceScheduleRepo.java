@@ -24,4 +24,8 @@ public interface RaceScheduleRepo extends JpaRepository<RaceSchedule, Integer> {
                                             @Param("endTime") LocalDateTime endTime);
 
     java.util.Optional<RaceSchedule> findByName(String name);
+
+    boolean existsByRaceTrackId(Integer raceTrackId);
+
+    List<RaceSchedule> findByRaceReferee(com.horseracing.project3.entity.RaceReferee referee);
 }

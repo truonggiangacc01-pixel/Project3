@@ -659,5 +659,44 @@ public class DataInitializer implements CommandLineRunner {
 
         // Lưu tất cả Prediction xuống database
         predictionRepo.saveAll(predictions);
+
+        /*___________________________________________________________________________________________________________ */
+        //                                      DEMO TOURNAMENT & RACE (DÀNH CHO E2E TEST UC-18 -> UC-29)
+        // Dữ liệu sẽ tự động tính toán thời gian (LocalDateTime.now) để vượt qua mọi vòng chặn validation thời gian
+        LocalDateTime now = LocalDateTime.now();
+        Tournament demoTour = new Tournament("Giải Demo E2E Test (Auto-generated)", "Trường đua Ảo",
+                now.toLocalDate(),
+                now.toLocalDate().plusDays(5),
+                TournamentStatus.ACTIVE, null,
+                now.minusDays(5),
+                now.plusDays(1), Boolean.FALSE);
+        demoTour.setAdmin(savedAdmins.get(0));
+        tournamentService.saveTournament(demoTour);
+
+        RaceSchedule demoRace = new RaceSchedule("Cuộc đua Demo Test Start API",
+                now.toLocalDate(), "Trường đua Ảo",
+                null, RaceScheduleStatus.SCHEDULED,
+                now.minusMinutes(5), // Cố tình lùi lại 5 phút so với hiện tại để nút Start được phép bấm ngay
+                now.plusHours(2));
+        demoRace.setTournament(demoTour);
+        raceScheduleService.saveRaceSchedule(demoRace);
+
+        // Bỏ qua bước Đăng ký rườm rà, tạo sẵn 2 đơn Đã duyệt (APPROVED) để test luôn phần Thanh tra (Inspection)
+        RaceParticipation demoRp1 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 1);
+        demoRp1.setRaceSchedule(demoRace);
+        demoRp1.setHorse(savedHorses.get(0));
+        demoRp1.setJockey(savedJockeys.get(0));
+        raceParticipationRepo.save(demoRp1);
+
+        RaceParticipation demoRp2 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 2);
+        demoRp2.setRaceSchedule(demoRace);
+        demoRp2.setHorse(savedHorses.get(1));
+        demoRp2.setJockey(savedJockeys.get(1));
+        raceParticipationRepo.save(demoRp2);
+
+        System.out.println("=====================================================================");
+        System.out.println("=> [E2E Test] Đã tạo thành công Giải đấu và Cuộc đua Demo.");
+        System.out.println("=> Không bị kẹt thời gian, sẵn sàng test luồng Start Race ngay!");
+        System.out.println("=====================================================================");
     }
 }

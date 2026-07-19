@@ -15,6 +15,10 @@ public class RaceRefereeService {
         raceRefereeRepo.save(racereferee);
     }
 
+    public java.util.List<RaceReferee> getAllReferees() {
+        return raceRefereeRepo.findAll();
+    }
+
     public com.horseracing.project3.dto.response.ApiResponse<RaceReferee> updateRefereeProfile(Integer refereeId, com.horseracing.project3.dto.request.RefereeProfileUpdateRequest request) {
         RaceReferee referee = raceRefereeRepo.findById(refereeId).orElseThrow(() -> new RuntimeException("Race Referee not found"));
         

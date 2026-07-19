@@ -1,6 +1,7 @@
 package com.horseracing.project3.service;
 
 import com.horseracing.project3.entity.Jockey;
+import com.horseracing.project3.enums.AccountStatus;
 import com.horseracing.project3.repository.JockeyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,5 +80,91 @@ public class JockeyService {
         jockey.setLicenseExpiryDate(licenseExpiryDate);
         jockeyRepo.save(jockey);
         return new ApiResponse<>(true, "Cập nhật giấy phép thành công", jockey);
+    }
+
+    public Jockey addJockeyAdmin(Jockey newJockey) {
+        if (newJockey.getFullName() == null || newJockey.getFullName().trim().length() < 4) {
+            throw new RuntimeException("Tên Jockey phải có ít nhất 4 ký tự");
+        }
+        if (newJockey.getLicenseNumber() == null || newJockey.getLicenseNumber().trim().isEmpty()) {
+            throw new RuntimeException("Giấy phép không được để trống");
+        }
+        if (newJockey.getUserName() == null || newJockey.getUserName().trim().length() < 4) {
+            throw new RuntimeException("Tên đăng nhập phải có ít nhất 4 ký tự");
+        }
+        if (jockeyRepo.existsByUserName(newJockey.getUserName())) {
+            throw new RuntimeException("Username đã tồn tại");
+        }
+        if (newJockey.getEmail() == null || !newJockey.getEmail().contains("@")) {
+            throw new RuntimeException("Email không hợp lệ");
+        }
+        if (newJockey.getPhone() == null || !newJockey.getPhone().matches("^0\\d{9}$")) {
+            throw new RuntimeException("Số điện thoại không hợp lệ");
+        }
+        if (newJockey.getPassword() == null || newJockey.getPassword().trim().length() < 6) {
+            throw new RuntimeException("Mật khẩu phải có ít nhất 6 ký tự");
+        }
+        if (newJockey.getBirthDate() == null) {
+            throw new RuntimeException("Ngày sinh không được để trống");
+        }
+        if (newJockey.getExperienceYears() == null || newJockey.getExperienceYears() < 0) {
+            throw new RuntimeException("Số năm kinh nghiệm không hợp lệ");
+        }
+        
+        // Force status to APPROVED on creation
+        newJockey.setAccountStatus(com.horseracing.project3.enums.AccountStatus.APPROVED);
+        
+        return jockeyRepo.save(newJockey);
+    }
+
+    public Jockey updateJockeyAdmin(Integer jockeyId, Jockey updatedData) {
+        Jockey existingJockey = jockeyRepo.findById(jockeyId)
+                .orElseThrow(() -> new RuntimeException("Jockey not found"));
+
+        if (updatedData.getFullName() == null || updatedData.getFullName().trim().length() < 4) {
+            throw new RuntimeException("Tên Jockey phải có ít nhất 4 ký tự");
+        }
+        if (updatedData.getLicenseNumber() == null || updatedData.getLicenseNumber().trim().isEmpty()) {
+            throw new RuntimeException("Giấy phép không được để trống");
+        }
+        if (updatedData.getEmail() == null || !updatedData.getEmail().contains("@")) {
+            throw new RuntimeException("Email không hợp lệ");
+        }
+        if (updatedData.getPhone() == null || !updatedData.getPhone().matches("^0\\d{9}$")) {
+            throw new RuntimeException("Số điện thoại không hợp lệ");
+        }
+        if (updatedData.getBirthDate() == null) {
+            throw new RuntimeException("Ngày sinh không được để trống");
+        }
+        if (updatedData.getExperienceYears() == null || updatedData.getExperienceYears() < 0) {
+            throw new RuntimeException("Số năm kinh nghiệm không hợp lệ");
+        }
+
+        existingJockey.setFullName(updatedData.getFullName());
+        existingJockey.setLicenseNumber(updatedData.getLicenseNumber());
+        existingJockey.setEmail(updatedData.getEmail());
+        existingJockey.setPhone(updatedData.getPhone());
+        existingJockey.setBirthDate(updatedData.getBirthDate());
+        existingJockey.setExperienceYears(updatedData.getExperienceYears());
+        
+        if (updatedData.getPassword() != null && !updatedData.getPassword().trim().isEmpty()) {
+            if (updatedData.getPassword().trim().length() < 6) {
+                throw new RuntimeException("Mật khẩu phải có ít nhất 6 ký tự");
+            }
+            existingJockey.setPassword(updatedData.getPassword());
+        }
+        
+        if (updatedData.getAccountStatus() != null) {
+            existingJockey.setAccountStatus(updatedData.getAccountStatus());
+        }
+
+        return jockeyRepo.save(existingJockey);
+    }
+
+    public void deleteJockeyAdmin(Integer jockeyId) {
+        if (!jockeyRepo.existsById(jockeyId)) {
+            throw new RuntimeException("Jockey not found");
+        }
+        jockeyRepo.deleteById(jockeyId);
     }
 }

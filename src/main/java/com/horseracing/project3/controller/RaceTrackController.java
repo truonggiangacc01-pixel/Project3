@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/race-tracks")
 @CrossOrigin(origins = "*")
-@Tag(name = "API Race Track UC-20")
+@Tag(name = "API Race Track UC-20 Kiểm thử thành công")
 public class RaceTrackController {
 
     @Autowired
@@ -39,6 +39,17 @@ public class RaceTrackController {
     public ResponseEntity<?> updateRaceTrack(@PathVariable Integer trackId, @RequestBody RaceTrackRequest request) {
         try {
             return ResponseEntity.ok(new ApiResponse<>(true, "Race track updated", RaceTrackResponse.from(raceUseCaseService.updateRaceTrack(trackId, request))));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
+    }
+
+    @DeleteMapping("/{trackId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> deleteRaceTrack(@PathVariable Integer trackId) {
+        try {
+            raceUseCaseService.deleteRaceTrack(trackId);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Race track deleted", null));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
         }
