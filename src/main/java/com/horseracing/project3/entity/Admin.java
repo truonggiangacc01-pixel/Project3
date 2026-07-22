@@ -33,6 +33,10 @@ public class Admin {
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private com.horseracing.project3.enums.AccountStatus accountStatus = com.horseracing.project3.enums.AccountStatus.APPROVED;
+
     /*___________________________________________________________________________________________________________ */
 
     //MAPPING MỐI QUAN HỆ 1-N (Admin - Tournament)
@@ -121,6 +125,14 @@ public class Admin {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public com.horseracing.project3.enums.AccountStatus getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(com.horseracing.project3.enums.AccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
     }
 
 

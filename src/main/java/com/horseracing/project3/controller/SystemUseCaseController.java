@@ -4,7 +4,9 @@ import com.horseracing.project3.dto.request.UseCaseRequestDtos.SendNotificationR
 import com.horseracing.project3.dto.response.ApiResponse;
 import com.horseracing.project3.dto.response.UseCaseResponseDtos.NotificationResponse;
 import com.horseracing.project3.dto.response.UseCaseResponseDtos.RankingEntryResponse;
+import com.horseracing.project3.dto.response.UseCaseResponseDtos.RaceScheduleResponse;
 import com.horseracing.project3.service.RaceUseCaseService;
+import com.horseracing.project3.service.RaceRefereeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,29 @@ public class SystemUseCaseController {
 
     @Autowired
     private RaceUseCaseService raceUseCaseService;
+
+    @Autowired
+    private RaceRefereeService raceRefereeService;
+
+    @GetMapping("/referees")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> getAllReferees() {
+        try {
+            return ResponseEntity.ok(new ApiResponse<>(true, "Lấy danh sách trọng tài thành công", raceRefereeService.getAllReferees()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
+    }
+
+    @PutMapping("/races/{raceId}/assign-referee")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> assignRefereeToRace(@PathVariable Integer raceId, @RequestParam(required = false) Integer refereeId) {
+        try {
+            return ResponseEntity.ok(new ApiResponse<>(true, "Phân công trọng tài thành công", RaceScheduleResponse.from(raceUseCaseService.assignRefereeToRace(raceId, refereeId))));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
+    }
 
     @PostMapping("/predictions/close-due")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

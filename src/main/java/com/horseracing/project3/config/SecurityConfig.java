@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/tournaments/*/rankings",
                                 "/api/tournaments/*/rankings/jockeys").permitAll()
-                        .requestMatchers("/api/admin/accounts", "/api/admin/accounts/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/owner/**").hasAuthority("ROLE_HORSE_OWNER")
                         .anyRequest().authenticated()
                 );

@@ -9,7 +9,7 @@ public class TournamentResponseDto {
     private LocalDate startDate;
     private LocalDate endDate;
     private String status;
-    private int races;
+    private Integer racesCount;
 
     public TournamentResponseDto() {
     }
@@ -20,12 +20,6 @@ public class TournamentResponseDto {
         this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
-    }
-
-    public TournamentResponseDto(Integer id, String name, String location, LocalDate startDate, LocalDate endDate, String status, int races) {
-        this(id, name, location, startDate, endDate);
-        this.status = status;
-        this.races = races;
     }
 
     // Getters and Setters
@@ -78,11 +72,11 @@ public class TournamentResponseDto {
         this.status = status;
     }
 
-    public int getRaces() {
-        return races;
+    public Integer getRacesCount() {
+        return racesCount;
     }
 
-    public void setRaces(int races) {
-        this.races = races;
+    public void setRacesCount(Integer racesCount) {
+        this.racesCount = racesCount;
     }
 }

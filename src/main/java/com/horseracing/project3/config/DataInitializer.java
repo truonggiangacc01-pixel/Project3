@@ -134,16 +134,16 @@ public class DataInitializer implements CommandLineRunner {
 
         /*___________________________________________________________________________________________________________ */
         //                                                  RACE REFEREE
-        RaceReferee ref1 = new RaceReferee("Lương Công Bằng", "BangLCB", "congbang.ref@mail.com", "0911112233", "RaRe123", LocalDate.of(1972, 3, 14), 4, "Quốc tế");
-        RaceReferee ref2 = new RaceReferee("Trịnh Chính Trực", "TrucTCT", "chinhtruc.ref@mail.com", "0912223344", "RaRe123", LocalDate.of(1975, 8, 28), 8, "Quốc tế");
-        RaceReferee ref3 = new RaceReferee("Tạ Khách Quan", "QuanTKQ", "khachquan.ref@mail.com", "0913334455", "RaRe123", LocalDate.of(1979, 11, 5), 3, "Quốc tế");
-        RaceReferee ref4 = new RaceReferee("Võ Minh Bạch", "AchVMB", "minhbach.ref@mail.com", "0914445566", "RaRe123", LocalDate.of(1981, 1, 22), 10, "Quốc tế");
-        RaceReferee ref5 = new RaceReferee("Đào Công Tâm", "AmĐCT", "congtam.ref@mail.com", "0915556677", "RaRe123", LocalDate.of(1984, 10, 9), 6, "Quốc tế");
-        RaceReferee ref6 = new RaceReferee("Phan Trung Lập", "LapPTL", "trunglap.ref@mail.com", "0916667788", "RaRe123", LocalDate.of(1986, 12, 31), 5, "Quốc tế");
-        RaceReferee ref7 = new RaceReferee("Bùi Đức Minh", "InhBĐM", "duicminh.ref@mail.com", "0917778899", "RaRe123", LocalDate.of(1988, 4, 12), 9, "Quốc tế");
-        RaceReferee ref8 = new RaceReferee("Đoàn Quang Sang", "SangĐQS", "quangsang.ref@mail.com", "0918889900", "RaRe123", LocalDate.of(1989, 6, 3), 2, "Quốc tế");
-        RaceReferee ref9 = new RaceReferee("Chu Uy Nghiêm", "IemCUN", "uynghiem.ref@mail.com", "0919990011", "RaRe123", LocalDate.of(1990, 9, 25), 4, "Quốc tế");
-        RaceReferee ref10 = new RaceReferee("Lâm Quyết Đoán", "DoanLQĐ", "quyetdoan.ref@mail.com", "0911001122", "RaRe123", LocalDate.of(1991, 9, 25), 8, "Quốc tế");
+        RaceReferee ref1 = new RaceReferee("Lương Công Bằng", "BangLCB", "congbang.ref@mail.com", "0911112233", "ref123", LocalDate.of(1972, 3, 14), 4, "Quốc tế");
+        RaceReferee ref2 = new RaceReferee("Trịnh Chính Trực", "TrucTCT", "chinhtruc.ref@mail.com", "0912223344", "ref123", LocalDate.of(1975, 8, 28), 8, "Quốc tế");
+        RaceReferee ref3 = new RaceReferee("Tạ Khách Quan", "QuanTKQ", "khachquan.ref@mail.com", "0913334455", "ref123", LocalDate.of(1979, 11, 5), 3, "Quốc tế");
+        RaceReferee ref4 = new RaceReferee("Võ Minh Bạch", "AchVMB", "minhbach.ref@mail.com", "0914445566", "ref123", LocalDate.of(1981, 1, 22), 10, "Quốc tế");
+        RaceReferee ref5 = new RaceReferee("Đào Công Tâm", "AmĐCT", "congtam.ref@mail.com", "0915556677", "ref123", LocalDate.of(1984, 10, 9), 6, "Quốc tế");
+        RaceReferee ref6 = new RaceReferee("Phan Trung Lập", "LapPTL", "trunglap.ref@mail.com", "0916667788", "ref123", LocalDate.of(1986, 12, 31), 5, "Quốc tế");
+        RaceReferee ref7 = new RaceReferee("Bùi Đức Minh", "InhBĐM", "duicminh.ref@mail.com", "0917778899", "ref123", LocalDate.of(1988, 4, 12), 9, "Quốc tế");
+        RaceReferee ref8 = new RaceReferee("Đoàn Quang Sang", "SangĐQS", "quangsang.ref@mail.com", "0918889900", "ref123", LocalDate.of(1989, 6, 3), 2, "Quốc tế");
+        RaceReferee ref9 = new RaceReferee("Chu Uy Nghiêm", "IemCUN", "uynghiem.ref@mail.com", "0919990011", "ref123", LocalDate.of(1990, 9, 25), 4, "Quốc tế");
+        RaceReferee ref10 = new RaceReferee("Lâm Quyết Đoán", "DoanLQĐ", "quyetdoan.ref@mail.com", "0911001122", "ref123", LocalDate.of(1991, 9, 25), 8, "Quốc tế");
 
         /*___________________________________________________________________________________________________________ */
         //                                                  HORSE
@@ -245,31 +245,31 @@ public class DataInitializer implements CommandLineRunner {
         
         RaceSchedule rs6 = new RaceSchedule("Chung kết Thu 2026",
                 LocalDate.of(2026, 8, 24), "Trường đua Sóc Sơn",
-                null, RaceScheduleStatus.PENDING,
+                null, RaceScheduleStatus.SCHEDULED,
                 LocalDateTime.of(2026, 8, 24, 15, 0, 0),
                 LocalDateTime.of(2026, 8, 24, 17, 0, 0));
         
         RaceSchedule rs7 = new RaceSchedule("Chung kết Đông 2026",
                 LocalDate.of(2026, 11, 9), "Trường đua Đại Nam",
-                null, RaceScheduleStatus.PENDING,
+                null, RaceScheduleStatus.SCHEDULED,
                 LocalDateTime.of(2026, 11, 9, 15, 0, 0),
                 LocalDateTime.of(2026, 11, 9, 17, 0, 0));
         
         RaceSchedule rs8 = new RaceSchedule("Bán kết Quốc gia 2026 lần 1",
                 LocalDate.of(2026, 12, 22), "Trường đua Phú Thọ",
-                null, RaceScheduleStatus.PENDING,
+                null, RaceScheduleStatus.SCHEDULED,
                 LocalDateTime.of(2026, 12, 22, 15, 0, 0),
                 LocalDateTime.of(2026, 12, 22, 17, 0, 0));
         
         RaceSchedule rs9 = new RaceSchedule("Bán kết Quốc gia 2026 lần 2",
                 LocalDate.of(2026, 12, 23), "Trường đua Phú Thọ",
-                null, RaceScheduleStatus.PENDING,
+                null, RaceScheduleStatus.SCHEDULED,
                 LocalDateTime.of(2026, 12, 23, 15, 0, 0),
                 LocalDateTime.of(2026, 12, 23, 17, 0, 0));
         
         RaceSchedule rs10 = new RaceSchedule("Chung kết Quốc gia 2026",
                 LocalDate.of(2026, 12, 24), "Trường đua Phú Thọ",
-                null, RaceScheduleStatus.PENDING,
+                null, RaceScheduleStatus.SCHEDULED,
                 LocalDateTime.of(2026, 12, 24, 15, 0, 0),
                 LocalDateTime.of(2026, 12, 24, 17, 0, 0));
 
@@ -662,5 +662,44 @@ public class DataInitializer implements CommandLineRunner {
 
         // Lưu tất cả Prediction xuống database
         predictionRepo.saveAll(predictions);
+
+        /*___________________________________________________________________________________________________________ */
+        //                                      DEMO TOURNAMENT & RACE (DÀNH CHO E2E TEST UC-18 -> UC-29)
+        // Dữ liệu sẽ tự động tính toán thời gian (LocalDateTime.now) để vượt qua mọi vòng chặn validation thời gian
+        LocalDateTime now = LocalDateTime.now();
+        Tournament demoTour = new Tournament("Giải Demo E2E Test (Auto-generated)", "Trường đua Ảo",
+                now.toLocalDate(),
+                now.toLocalDate().plusDays(5),
+                TournamentStatus.ACTIVE, null,
+                now.minusDays(5),
+                now.plusDays(1), Boolean.FALSE);
+        demoTour.setAdmin(savedAdmins.get(0));
+        tournamentService.saveTournament(demoTour);
+
+        RaceSchedule demoRace = new RaceSchedule("Cuộc đua Demo Test Start API",
+                now.toLocalDate(), "Trường đua Ảo",
+                null, RaceScheduleStatus.SCHEDULED,
+                now.minusMinutes(5), // Cố tình lùi lại 5 phút so với hiện tại để nút Start được phép bấm ngay
+                now.plusHours(2));
+        demoRace.setTournament(demoTour);
+        raceScheduleService.saveRaceSchedule(demoRace);
+
+        // Bỏ qua bước Đăng ký rườm rà, tạo sẵn 2 đơn Đã duyệt (APPROVED) để test luôn phần Thanh tra (Inspection)
+        RaceParticipation demoRp1 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 1);
+        demoRp1.setRaceSchedule(demoRace);
+        demoRp1.setHorse(savedHorses.get(0));
+        demoRp1.setJockey(savedJockeys.get(0));
+        raceParticipationRepo.save(demoRp1);
+
+        RaceParticipation demoRp2 = new RaceParticipation(RaceParticipationStatus.CONFIRMED, 2);
+        demoRp2.setRaceSchedule(demoRace);
+        demoRp2.setHorse(savedHorses.get(1));
+        demoRp2.setJockey(savedJockeys.get(1));
+        raceParticipationRepo.save(demoRp2);
+
+        System.out.println("=====================================================================");
+        System.out.println("=> [E2E Test] Đã tạo thành công Giải đấu và Cuộc đua Demo.");
+        System.out.println("=> Không bị kẹt thời gian, sẵn sàng test luồng Start Race ngay!");
+        System.out.println("=====================================================================");
     }
 }

@@ -15,7 +15,13 @@ public interface RaceParticipationRepo extends JpaRepository<RaceParticipation, 
 
     boolean existsByHorseIdAndRaceScheduleId(Integer horseId, Integer raceScheduleId);
 
+    java.util.Optional<RaceParticipation> findByHorseIdAndRaceScheduleId(Integer horseId, Integer raceScheduleId);
+
     List<RaceParticipation> findByJockeyIdAndJockeyInvitationStatusNot(Integer jockeyId, JockeyInvitationStatus status);
 
     List<RaceParticipation> findByRaceScheduleId(Integer raceScheduleId);
+
+    List<RaceParticipation> findByHorseHorseOwnerEmail(String email);
+
+    List<RaceParticipation> findByJockeyEmail(String email);
 }

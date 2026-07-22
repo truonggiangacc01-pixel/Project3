@@ -5,7 +5,6 @@ import com.horseracing.project3.dto.response.TournamentResponseDto;
 import com.horseracing.project3.dto.request.UpdateTournamentRequestDto;
 import com.horseracing.project3.dto.request.CancelTournamentRequestDto;
 import com.horseracing.project3.dto.request.OpenRegistrationRequestDto;
-import com.horseracing.project3.repository.TournamentRepo;
 import com.horseracing.project3.service.TournamentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -19,30 +18,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/tournaments")
 @CrossOrigin(origins = "*")
-@Tag(name = "API Tournaments")
+@Tag(name = "API Tournaments Kiểm thử thành công")
 public class TournamentController {
 
     @Autowired
     private TournamentService tournamentService;
 
-    @Autowired
-    private TournamentRepo tournamentRepo;
-
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getAllTournaments() {
         try {
-            var list = tournamentRepo.findAll().stream().map(t -> new TournamentResponseDto(
-                    t.getId(),
-                    t.getName(),
-                    t.getLocation(),
-                    t.getStartDate(),
-                    t.getEndDate(),
-                    t.getStatus() != null ? t.getStatus().name() : "DRAFT",
-                    t.getRaceScheduleList() != null ? t.getRaceScheduleList().size() : 0
-            )).toList();
-            return ResponseEntity.ok(list);
+            return ResponseEntity.ok(tournamentService.getAllTournaments());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi hệ thống: " + e.getMessage());
         }
     }
 

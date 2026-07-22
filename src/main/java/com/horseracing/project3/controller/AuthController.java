@@ -10,11 +10,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
-@Tag(name = "API Authentication")
+@Tag(name = "API Authentication Kiểm thử thành công")
 public class AuthController {
 
     @Autowired
@@ -69,6 +72,15 @@ public class AuthController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"" + e.getMessage() + "\"}");
         }
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        String errorMessage = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", false);
+        response.put("message", errorMessage);
+        return ResponseEntity.badRequest().body(response);
     }
 
 }

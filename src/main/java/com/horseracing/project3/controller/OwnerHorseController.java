@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/owner/horses")
 @CrossOrigin(origins = "*")
-@Tag(name = "API HorseOwner")
+@Tag(name = "API HorseOwner Kiểm thử thành công")
 public class OwnerHorseController {
 
     @Autowired
@@ -48,6 +48,17 @@ public class OwnerHorseController {
             String email = authentication.getName();
             Horse updatedHorse = horseService.updateHorse(horseId, horse, email);
             return new ResponseEntity<>(updatedHorse, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{horseId}")
+    public ResponseEntity<?> deleteHorse(@PathVariable Integer horseId, Authentication authentication) {
+        try {
+            String email = authentication.getName();
+            horseService.deleteHorseOwner(horseId, email);
+            return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

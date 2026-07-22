@@ -2,6 +2,7 @@ package com.horseracing.project3.dto.request;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import com.horseracing.project3.enums.RaceScheduleStatus;
 
 public class CreateRaceScheduleRequest {
     private String name;
@@ -9,6 +10,7 @@ public class CreateRaceScheduleRequest {
     private String location;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private RaceScheduleStatus status;
 
     public CreateRaceScheduleRequest() {}
 
@@ -58,5 +60,13 @@ public class CreateRaceScheduleRequest {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public RaceScheduleStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RaceScheduleStatus status) {
+        this.status = status;
     }
 }

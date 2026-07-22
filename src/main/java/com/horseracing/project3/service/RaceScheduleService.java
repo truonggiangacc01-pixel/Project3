@@ -56,7 +56,13 @@ public class RaceScheduleService {
         schedule.setLocation(request.getLocation());
         schedule.setStartTime(request.getStartTime());
         schedule.setEndTime(request.getEndTime());
-        schedule.setStatus(RaceScheduleStatus.PENDING);
+        
+        if (request.getStatus() != null) {
+            schedule.setStatus(request.getStatus());
+        } else {
+            schedule.setStatus(RaceScheduleStatus.SCHEDULED);
+        }
+        
         schedule.setTournament(tournament);
 
         return raceScheduleRepo.save(schedule);
@@ -122,6 +128,18 @@ public class RaceScheduleService {
 
         schedule.setStartTime(request.getStartTime());
         schedule.setEndTime(request.getEndTime());
+        if (request.getStatus() != null) {
+            schedule.setStatus(request.getStatus());
+        }
+        if (request.getName() != null) {
+            schedule.setName(request.getName());
+        }
+        if (request.getRaceDate() != null) {
+            schedule.setRaceDate(request.getRaceDate());
+        }
+        if (request.getLocation() != null) {
+            schedule.setLocation(request.getLocation());
+        }
 
         return raceScheduleRepo.save(schedule);
     }

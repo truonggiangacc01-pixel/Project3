@@ -19,10 +19,13 @@ public class UseCaseResponseDtos {
             String delayReason,
             Integer tournamentId,
             Integer raceTrackId,
-            String raceTrackName
+            String raceTrackName,
+            Integer refereeId,
+            String refereeName
     ) {
         public static RaceScheduleResponse from(RaceSchedule race) {
             RaceTrack raceTrack = race.getRaceTrack();
+            RaceReferee referee = race.getRaceReferee();
             return new RaceScheduleResponse(
                     race.getId(),
                     race.getName(),
@@ -34,7 +37,9 @@ public class UseCaseResponseDtos {
                     race.getDelayReason(),
                     race.getTournament() == null ? null : race.getTournament().getId(),
                     raceTrack == null ? null : raceTrack.getId(),
-                    raceTrack == null ? null : raceTrack.getName()
+                    raceTrack == null ? null : raceTrack.getName(),
+                    referee == null ? null : referee.getId(),
+                    referee == null ? null : referee.getFullName()
             );
         }
     }

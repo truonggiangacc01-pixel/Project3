@@ -37,6 +37,10 @@ public class Spectator {
     @Column(name = "wallet_balance", columnDefinition = "DECIMAL(15, 0)", nullable = false)
     private BigDecimal walletBalance = BigDecimal.ZERO;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private com.horseracing.project3.enums.AccountStatus accountStatus = com.horseracing.project3.enums.AccountStatus.APPROVED;
+
     /*___________________________________________________________________________________________________________ */
 
     //MAPPING MỐI QUAN HỆ 1-N (Spectator - Ticket)
@@ -153,6 +157,14 @@ public class Spectator {
 
     public void setWalletBalance(BigDecimal walletBalance) {
         this.walletBalance = walletBalance == null ? BigDecimal.ZERO : walletBalance;
+    }
+
+    public com.horseracing.project3.enums.AccountStatus getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(com.horseracing.project3.enums.AccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
     }
 
 

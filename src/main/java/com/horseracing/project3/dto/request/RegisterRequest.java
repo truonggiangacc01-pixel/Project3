@@ -9,23 +9,25 @@ public class RegisterRequest {
 
     // --- THÔNG TIN CHUNG (TRANG 1) ---
     @NotBlank(message = "fullName is required")
-    @Size(min = 4, max = 255, message = "fullName must be between 4 and 20 characters long.")
+    @Size(min = 4, message = "Full Name trong khoảng 4 đến 20 ký tự. Full Name đang dưới 4 ký tự")
+    @Size(max = 20, message = "Full Name trong khoảng 4 đến 20 ký tự. Full Name đang trên 20 ký tự")
     private String fullName;
 
     @NotBlank(message = "userName is required")
-    @Size(min = 4, max = 255, message = "userName must be between 4 and 20 characters long.")
+    @Size(min = 4, message = "User Name trong khoảng 4 đến 20 ký tự. User Name đang dưới 4 ký tự")
+    @Size(max = 20, message = "User Name trong khoảng 4 đến 20 ký tự. User Name đang trên 20 ký tự")
     private String userName;
 
     @NotBlank(message = "Email is required")
-    @Email(message = "Email is not in the correct format")
+    @Email(message = "không đúng định dạng gmail")
     private String email;
 
     @NotBlank(message = "Phone is required")
-    @Pattern(regexp = "^0\\d{9,10}$", message = "The phone number must contain 10-11 digits")
+    @Pattern(regexp = "^0\\d{9,10}$", message = "số điện thoại không hợp lệ")
     private String phone;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 4, message = "The password must be at least 4 character long")
+    @Size(min = 4, message = "Mật khẩu phải có ít nhất 4 ký tự")
     private String password;
 
     @NotNull(message = "Birth date is required")
@@ -38,10 +40,19 @@ public class RegisterRequest {
     // --- THÔNG TIN RIÊNG (TRANG 2) ---
 
     // Dành cho HorseOwner
+    @Size(min = 4, message = "Địa chỉ khoảng 4 đến 20 ký tự. Địa chỉ đang dưới 4 ký tự")
+    @Size(max = 20, message = "Địa chỉ khoảng 4 đến 20 ký tự. Địa chỉ đang trên 20 ký tự")
     private String address;
 
+    @Size(min = 4, message = "Tên trang trại khoảng 4 đến 20 ký tự. Tên trang trại đang dưới 4 ký tự")
+    @Size(max = 20, message = "Tên trang trại khoảng 4 đến 20 ký tự. Tên trang trại đang trên 20 ký tự")
+    private String stableName;
+
+    @Min(value = 1, message = "Phải sở hữu ít nhất 1 con ngựa mới được phép đăng ký")
+    private Integer horseCount;
+
     // Dành cho Jockey & RaceReferee
-    @Positive(message = "The experience year must be positive")
+    @Min(value = 0, message = "Số năm kinh nghiệm không được phép là số âm")
     private Integer experienceYears;
 
     // Dành cho Jockey
@@ -49,6 +60,10 @@ public class RegisterRequest {
 
     // Dành cho RaceReferee
     private String certificateLevel;
+
+    @Size(min = 4, message = "Tên hiệp hội khoảng 4 đến 20 ký tự. Tên hiệp hội đang dưới 4 ký tự")
+    @Size(max = 20, message = "Tên hiệp hội khoảng 4 đến 20 ký tự. Tên hiệp hội đang trên 20 ký tự")
+    private String associationName;
 
     /*___________________________________________________________________________________________________________ */
     //                                                  CONSTRUCTOR RỖNG
@@ -59,7 +74,7 @@ public class RegisterRequest {
     /*___________________________________________________________________________________________________________ */
     //                                                  CONSTRUCTOR FULL
 
-    public RegisterRequest(String fullName, String userName, String email, String phone, String password, LocalDate birthDate, UserRole role, String address, Integer experienceYears, String licenseNumber, String certificateLevel) {
+    public RegisterRequest(String fullName, String userName, String email, String phone, String password, LocalDate birthDate, UserRole role, String address, Integer experienceYears, String licenseNumber, String certificateLevel, String stableName, Integer horseCount, String associationName) {
         this.fullName = fullName;
         this.userName = userName;
         this.email = email;
@@ -71,6 +86,9 @@ public class RegisterRequest {
         this.experienceYears = experienceYears;
         this.licenseNumber = licenseNumber;
         this.certificateLevel = certificateLevel;
+        this.stableName = stableName;
+        this.horseCount = horseCount;
+        this.associationName = associationName;
     }
 
     /*___________________________________________________________________________________________________________ */
@@ -162,5 +180,29 @@ public class RegisterRequest {
 
     public void setCertificateLevel(String certificateLevel) {
         this.certificateLevel = certificateLevel;
+    }
+
+    public String getStableName() {
+        return stableName;
+    }
+
+    public void setStableName(String stableName) {
+        this.stableName = stableName;
+    }
+
+    public Integer getHorseCount() {
+        return horseCount;
+    }
+
+    public void setHorseCount(Integer horseCount) {
+        this.horseCount = horseCount;
+    }
+
+    public String getAssociationName() {
+        return associationName;
+    }
+
+    public void setAssociationName(String associationName) {
+        this.associationName = associationName;
     }
 }

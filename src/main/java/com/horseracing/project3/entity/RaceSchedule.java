@@ -67,6 +67,20 @@ public class RaceSchedule {
         this.raceTrack = raceTrack;
     }
 
+    //MAPPING MỐI QUAN HỆ GIỮA RaceSchedule - RaceReferee
+    //1, N RaceSchedule bất kỳ phải thuộc về 1 RaceReferee
+    @ManyToOne
+    @JoinColumn(name = "RaceRefereeId")
+    private RaceReferee raceReferee;
+
+    public RaceReferee getRaceReferee() {
+        return raceReferee;
+    }
+
+    public void setRaceReferee(RaceReferee raceReferee) {
+        this.raceReferee = raceReferee;
+    }
+
     /*___________________________________________________________________________________________________________ */
 
     //MAPPING MỐI QUAN HỆ 1-N (RaceSchedule - Prediction)

@@ -38,49 +38,26 @@ public class AccountManagementService {
 
         // Admin
         for (Admin admin : adminRepo.findAll()) {
-            responses.add(toResponse(admin));
+            responses.add(new UserAccountResponse(admin.getId(), admin.getFullName(), admin.getUserName(), admin.getEmail(), admin.getPhone(), UserRole.ADMIN, admin.getAccountStatus().name(), admin.getBirthDate(), null, null, null, null));
         }
         // Spectator
         for (Spectator spec : spectatorRepo.findAll()) {
-            responses.add(toResponse(spec));
+            responses.add(new UserAccountResponse(spec.getId(), spec.getFullName(), spec.getUserName(), spec.getEmail(), spec.getPhone(), UserRole.SPECTATOR, spec.getAccountStatus().name(), spec.getBirthDate(), null, null, null, null));
         }
         // HorseOwner
         for (HorseOwner owner : horseOwnerRepo.findAll()) {
-            responses.add(toResponse(owner));
+            responses.add(new UserAccountResponse(owner.getId(), owner.getFullName(), owner.getUserName(), owner.getEmail(), owner.getPhone(), UserRole.HORSE_OWNER, owner.getAccountStatus().name(), owner.getBirthDate(), owner.getAddress(), null, null, null));
         }
         // Jockey
         for (Jockey jockey : jockeyRepo.findAll()) {
-            responses.add(toResponse(jockey));
+            responses.add(new UserAccountResponse(jockey.getId(), jockey.getFullName(), jockey.getUserName(), jockey.getEmail(), jockey.getPhone(), UserRole.JOCKEY, jockey.getAccountStatus().name(), jockey.getBirthDate(), null, jockey.getExperienceYears(), jockey.getLicenseNumber(), null));
         }
         // RaceReferee
         for (RaceReferee ref : raceRefereeRepo.findAll()) {
-            responses.add(toResponse(ref));
+            responses.add(new UserAccountResponse(ref.getId(), ref.getFullName(), ref.getUserName(), ref.getEmail(), ref.getPhone(), UserRole.RACE_REFEREE, ref.getAccountStatus().name(), ref.getBirthDate(), null, ref.getExperienceYears(), null, ref.getCertificateLevel()));
         }
 
         return responses;
-    }
-
-    private UserAccountResponse toResponse(Admin admin) {
-        return new UserAccountResponse(admin.getId(), admin.getFullName(), admin.getUserName(), admin.getEmail(), admin.getPhone(), UserRole.ADMIN, "ACTIVE", admin.getBirthDate());
-    }
-
-    private UserAccountResponse toResponse(Spectator spec) {
-        return new UserAccountResponse(spec.getId(), spec.getFullName(), spec.getUserName(), spec.getEmail(), spec.getPhone(), UserRole.SPECTATOR, "ACTIVE", spec.getBirthDate());
-    }
-
-    private UserAccountResponse toResponse(HorseOwner owner) {
-        return new UserAccountResponse(owner.getId(), owner.getFullName(), owner.getUserName(), owner.getEmail(), owner.getPhone(), UserRole.HORSE_OWNER,
-                owner.getAccountStatus().name(), owner.getBirthDate(), owner.getAddress(), null, null, null);
-    }
-
-    private UserAccountResponse toResponse(Jockey jockey) {
-        return new UserAccountResponse(jockey.getId(), jockey.getFullName(), jockey.getUserName(), jockey.getEmail(), jockey.getPhone(), UserRole.JOCKEY,
-                jockey.getAccountStatus().name(), jockey.getBirthDate(), null, jockey.getExperienceYears(), jockey.getLicenseNumber(), null);
-    }
-
-    private UserAccountResponse toResponse(RaceReferee ref) {
-        return new UserAccountResponse(ref.getId(), ref.getFullName(), ref.getUserName(), ref.getEmail(), ref.getPhone(), UserRole.RACE_REFEREE,
-                ref.getAccountStatus().name(), ref.getBirthDate(), null, ref.getExperienceYears(), null, ref.getCertificateLevel());
     }
 
     private void validateEmailAndUsername(String email, String username) {
@@ -94,37 +71,62 @@ public class AccountManagementService {
 
     @Transactional
     public UserAccountResponse createAccount(CreateAccountRequest req) {
+        if (req.getUserName() == null || req.getUserName().isEmpty()) {
+            req.setUserName(req.getEmail().split("@")[0]);
+        }
+        if (req.getPassword() == null || req.getPassword().isEmpty()) {
+            req.setPassword("Password@123"); // Default password if not provided
+        }
+
+        if (req.getFullName() == null || req.getFullName().trim().length() < 4) {
+            throw new RuntimeException("Họ và tên phải có ít nhất 4 ký tự");
+        }
+        if (req.getPhone() == null || !req.getPhone().matches("^0\\d{9}$")) {
+            throw new RuntimeException("số điện thoại chưa đúng định dạng");
+        }
+        if (req.getBirthDate() != null) {
+            if (req.getBirthDate().isAfter(java.time.LocalDate.now())) {
+                throw new RuntimeException("ngày sinh không được phép diễn ra sau ngày thực hiện thao tác thay đổi");
+            }
+            int age = java.time.LocalDate.now().getYear() - req.getBirthDate().getYear();
+            if (age < 18) {
+                throw new RuntimeException("Phải đủ 18 tuổi trở lên");
+            }
+        }
+        
         validateEmailAndUsername(req.getEmail(), req.getUserName());
         String encodedPassword = passwordEncoder.encode(req.getPassword());
 
         switch (req.getRole()) {
             case ADMIN:
                 Admin admin = new Admin(req.getFullName(), req.getUserName(), req.getEmail(), req.getPhone(), encodedPassword, req.getBirthDate());
+                admin.setAccountStatus(AccountStatus.APPROVED);
                 admin = adminRepo.save(admin);
-                return toResponse(admin);
+                return new UserAccountResponse(admin.getId(), admin.getFullName(), admin.getUserName(), admin.getEmail(), admin.getPhone(), UserRole.ADMIN, admin.getAccountStatus().name(), admin.getBirthDate(), null, null, null, null);
 
             case SPECTATOR:
                 Spectator spec = new Spectator(req.getFullName(), req.getUserName(), req.getEmail(), req.getPhone(), encodedPassword, req.getBirthDate());
+                spec.setAccountStatus(AccountStatus.APPROVED);
                 spec = spectatorRepo.save(spec);
-                return toResponse(spec);
+                return new UserAccountResponse(spec.getId(), spec.getFullName(), spec.getUserName(), spec.getEmail(), spec.getPhone(), UserRole.SPECTATOR, spec.getAccountStatus().name(), spec.getBirthDate(), null, null, null, null);
 
             case HORSE_OWNER:
-                HorseOwner owner = new HorseOwner(req.getFullName(), req.getUserName(), req.getEmail(), req.getPhone(), encodedPassword, req.getBirthDate(), req.getAddress());
-                owner.setAccountStatus(AccountStatus.APPROVED); // Default for admin creation
+                HorseOwner owner = new HorseOwner(req.getFullName(), req.getUserName(), req.getEmail(), req.getPhone(), encodedPassword, req.getBirthDate(), req.getAddress() != null ? req.getAddress() : "");
+                owner.setAccountStatus(AccountStatus.APPROVED); // Active when created by admin
                 owner = horseOwnerRepo.save(owner);
-                return toResponse(owner);
+                return new UserAccountResponse(owner.getId(), owner.getFullName(), owner.getUserName(), owner.getEmail(), owner.getPhone(), UserRole.HORSE_OWNER, owner.getAccountStatus().name(), owner.getBirthDate(), owner.getAddress(), null, null, null);
 
             case JOCKEY:
-                Jockey jockey = new Jockey(req.getFullName(), req.getUserName(), req.getEmail(), req.getPhone(), encodedPassword, req.getBirthDate(), req.getExperienceYears(), req.getLicenseNumber());
+                Jockey jockey = new Jockey(req.getFullName(), req.getUserName(), req.getEmail(), req.getPhone(), encodedPassword, req.getBirthDate(), req.getExperienceYears() != null ? req.getExperienceYears() : 0, req.getLicenseNumber() != null ? req.getLicenseNumber() : "Chưa cập nhật");
                 jockey.setAccountStatus(AccountStatus.APPROVED);
                 jockey = jockeyRepo.save(jockey);
-                return toResponse(jockey);
+                return new UserAccountResponse(jockey.getId(), jockey.getFullName(), jockey.getUserName(), jockey.getEmail(), jockey.getPhone(), UserRole.JOCKEY, jockey.getAccountStatus().name(), jockey.getBirthDate(), null, jockey.getExperienceYears(), jockey.getLicenseNumber(), null);
 
             case RACE_REFEREE:
-                RaceReferee ref = new RaceReferee(req.getFullName(), req.getUserName(), req.getEmail(), req.getPhone(), encodedPassword, req.getBirthDate(), req.getExperienceYears(), req.getCertificateLevel());
+                RaceReferee ref = new RaceReferee(req.getFullName(), req.getUserName(), req.getEmail(), req.getPhone(), encodedPassword, req.getBirthDate(), req.getExperienceYears() != null ? req.getExperienceYears() : 0, req.getCertificateLevel() != null ? req.getCertificateLevel() : "Chưa cập nhật");
                 ref.setAccountStatus(AccountStatus.APPROVED);
                 ref = raceRefereeRepo.save(ref);
-                return toResponse(ref);
+                return new UserAccountResponse(ref.getId(), ref.getFullName(), ref.getUserName(), ref.getEmail(), ref.getPhone(), UserRole.RACE_REFEREE, ref.getAccountStatus().name(), ref.getBirthDate(), null, ref.getExperienceYears(), null, ref.getCertificateLevel());
 
             default:
                 throw new RuntimeException("Role không hợp lệ!");
@@ -133,22 +135,40 @@ public class AccountManagementService {
 
     @Transactional
     public UserAccountResponse updateAccount(UserRole role, Integer id, UpdateAccountRequest req) {
+        if (req.getFullName() == null || req.getFullName().trim().length() < 4) {
+            throw new RuntimeException("Họ và tên phải có ít nhất 4 ký tự");
+        }
+        if (req.getPhone() == null || !req.getPhone().matches("^0\\d{9}$")) {
+            throw new RuntimeException("số điện thoại chưa đúng định dạng");
+        }
+        if (req.getBirthDate() != null) {
+            if (req.getBirthDate().isAfter(java.time.LocalDate.now())) {
+                throw new RuntimeException("ngày sinh không được phép diễn ra sau ngày thực hiện thao tác thay đổi");
+            }
+            int age = java.time.LocalDate.now().getYear() - req.getBirthDate().getYear();
+            if (age < 18) {
+                throw new RuntimeException("Phải đủ 18 tuổi trở lên");
+            }
+        }
+
         switch (role) {
             case ADMIN:
                 Admin admin = adminRepo.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy Admin"));
                 admin.setFullName(req.getFullName());
                 admin.setPhone(req.getPhone());
                 admin.setBirthDate(req.getBirthDate());
+                if (req.getStatus() != null) admin.setAccountStatus(AccountStatus.valueOf(req.getStatus()));
                 admin = adminRepo.save(admin);
-                return toResponse(admin);
+                return new UserAccountResponse(admin.getId(), admin.getFullName(), admin.getUserName(), admin.getEmail(), admin.getPhone(), UserRole.ADMIN, admin.getAccountStatus().name(), admin.getBirthDate(), null, null, null, null);
 
             case SPECTATOR:
                 Spectator spec = spectatorRepo.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy Spectator"));
                 spec.setFullName(req.getFullName());
                 spec.setPhone(req.getPhone());
                 spec.setBirthDate(req.getBirthDate());
+                if (req.getStatus() != null) spec.setAccountStatus(AccountStatus.valueOf(req.getStatus()));
                 spec = spectatorRepo.save(spec);
-                return toResponse(spec);
+                return new UserAccountResponse(spec.getId(), spec.getFullName(), spec.getUserName(), spec.getEmail(), spec.getPhone(), UserRole.SPECTATOR, spec.getAccountStatus().name(), spec.getBirthDate(), null, null, null, null);
 
             case HORSE_OWNER:
                 HorseOwner owner = horseOwnerRepo.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy HorseOwner"));
@@ -158,7 +178,7 @@ public class AccountManagementService {
                 if (req.getAddress() != null) owner.setAddress(req.getAddress());
                 if (req.getStatus() != null) owner.setAccountStatus(AccountStatus.valueOf(req.getStatus()));
                 owner = horseOwnerRepo.save(owner);
-                return toResponse(owner);
+                return new UserAccountResponse(owner.getId(), owner.getFullName(), owner.getUserName(), owner.getEmail(), owner.getPhone(), UserRole.HORSE_OWNER, owner.getAccountStatus().name(), owner.getBirthDate(), owner.getAddress(), null, null, null);
 
             case JOCKEY:
                 Jockey jockey = jockeyRepo.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy Jockey"));
@@ -169,7 +189,7 @@ public class AccountManagementService {
                 if (req.getLicenseNumber() != null) jockey.setLicenseNumber(req.getLicenseNumber());
                 if (req.getStatus() != null) jockey.setAccountStatus(AccountStatus.valueOf(req.getStatus()));
                 jockey = jockeyRepo.save(jockey);
-                return toResponse(jockey);
+                return new UserAccountResponse(jockey.getId(), jockey.getFullName(), jockey.getUserName(), jockey.getEmail(), jockey.getPhone(), UserRole.JOCKEY, jockey.getAccountStatus().name(), jockey.getBirthDate(), null, jockey.getExperienceYears(), jockey.getLicenseNumber(), null);
 
             case RACE_REFEREE:
                 RaceReferee ref = raceRefereeRepo.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy RaceReferee"));
@@ -180,7 +200,7 @@ public class AccountManagementService {
                 if (req.getCertificateLevel() != null) ref.setCertificateLevel(req.getCertificateLevel());
                 if (req.getStatus() != null) ref.setAccountStatus(AccountStatus.valueOf(req.getStatus()));
                 ref = raceRefereeRepo.save(ref);
-                return toResponse(ref);
+                return new UserAccountResponse(ref.getId(), ref.getFullName(), ref.getUserName(), ref.getEmail(), ref.getPhone(), UserRole.RACE_REFEREE, ref.getAccountStatus().name(), ref.getBirthDate(), null, ref.getExperienceYears(), null, ref.getCertificateLevel());
 
             default:
                 throw new RuntimeException("Role không hợp lệ!");
@@ -234,27 +254,29 @@ public class AccountManagementService {
         switch (req.getNewRole()) {
             case ADMIN:
                 Admin newAdmin = new Admin(fullName, userName, email, phone, password, birthDate);
+                newAdmin.setAccountStatus(AccountStatus.APPROVED);
                 newAdmin = adminRepo.save(newAdmin);
-                return toResponse(newAdmin);
+                return new UserAccountResponse(newAdmin.getId(), newAdmin.getFullName(), newAdmin.getUserName(), newAdmin.getEmail(), newAdmin.getPhone(), UserRole.ADMIN, newAdmin.getAccountStatus().name(), newAdmin.getBirthDate(), null, null, null, null);
             case SPECTATOR:
                 Spectator newSpec = new Spectator(fullName, userName, email, phone, password, birthDate);
+                newSpec.setAccountStatus(AccountStatus.APPROVED);
                 newSpec = spectatorRepo.save(newSpec);
-                return toResponse(newSpec);
+                return new UserAccountResponse(newSpec.getId(), newSpec.getFullName(), newSpec.getUserName(), newSpec.getEmail(), newSpec.getPhone(), UserRole.SPECTATOR, newSpec.getAccountStatus().name(), newSpec.getBirthDate(), null, null, null, null);
             case HORSE_OWNER:
                 HorseOwner newOwner = new HorseOwner(fullName, userName, email, phone, password, birthDate, req.getAddress() != null ? req.getAddress() : "");
                 newOwner.setAccountStatus(AccountStatus.APPROVED);
                 newOwner = horseOwnerRepo.save(newOwner);
-                return toResponse(newOwner);
+                return new UserAccountResponse(newOwner.getId(), newOwner.getFullName(), newOwner.getUserName(), newOwner.getEmail(), newOwner.getPhone(), UserRole.HORSE_OWNER, newOwner.getAccountStatus().name(), newOwner.getBirthDate(), newOwner.getAddress(), null, null, null);
             case JOCKEY:
                 Jockey newJockey = new Jockey(fullName, userName, email, phone, password, birthDate, req.getExperienceYears() != null ? req.getExperienceYears() : 0, req.getLicenseNumber() != null ? req.getLicenseNumber() : "");
                 newJockey.setAccountStatus(AccountStatus.APPROVED);
                 newJockey = jockeyRepo.save(newJockey);
-                return toResponse(newJockey);
+                return new UserAccountResponse(newJockey.getId(), newJockey.getFullName(), newJockey.getUserName(), newJockey.getEmail(), newJockey.getPhone(), UserRole.JOCKEY, newJockey.getAccountStatus().name(), newJockey.getBirthDate(), null, newJockey.getExperienceYears(), newJockey.getLicenseNumber(), null);
             case RACE_REFEREE:
                 RaceReferee newRef = new RaceReferee(fullName, userName, email, phone, password, birthDate, req.getExperienceYears() != null ? req.getExperienceYears() : 0, req.getCertificateLevel() != null ? req.getCertificateLevel() : "");
                 newRef.setAccountStatus(AccountStatus.APPROVED);
                 newRef = raceRefereeRepo.save(newRef);
-                return toResponse(newRef);
+                return new UserAccountResponse(newRef.getId(), newRef.getFullName(), newRef.getUserName(), newRef.getEmail(), newRef.getPhone(), UserRole.RACE_REFEREE, newRef.getAccountStatus().name(), newRef.getBirthDate(), null, newRef.getExperienceYears(), null, newRef.getCertificateLevel());
             default:
                 throw new RuntimeException("Role mới không hợp lệ!");
         }
@@ -267,7 +289,12 @@ public class AccountManagementService {
                 // Cannot delete active accounts
                 throw new RuntimeException("Tài khoản đang hoạt động, không thể xóa!");
             case SPECTATOR:
-                throw new RuntimeException("Tài khoản đang hoạt động, không thể xóa!");
+                Spectator spectator = spectatorRepo.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy"));
+                if (spectator.getAccountStatus() == AccountStatus.APPROVED) {
+                    throw new RuntimeException("Tài khoản đang hoạt động, không thể xóa!");
+                }
+                spectatorRepo.delete(spectator);
+                break;
             case HORSE_OWNER:
                 HorseOwner owner = horseOwnerRepo.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy"));
                 if (owner.getAccountStatus() == AccountStatus.APPROVED) {

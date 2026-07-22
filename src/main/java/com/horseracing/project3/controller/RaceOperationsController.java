@@ -108,4 +108,14 @@ public class RaceOperationsController {
             return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
         }
     }
+
+    @GetMapping("/{raceId}/participations")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RACE_REFEREE')")
+    public ResponseEntity<?> getRaceParticipations(@PathVariable Integer raceId) {
+        try {
+            return ResponseEntity.ok(new ApiResponse<>(true, "Race participations fetched", raceUseCaseService.getRaceParticipations(raceId)));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
+    }
 }

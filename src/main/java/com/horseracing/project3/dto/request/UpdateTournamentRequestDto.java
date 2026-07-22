@@ -5,7 +5,9 @@ import com.horseracing.project3.enums.TournamentStatus;
 import java.time.LocalDate;
 
 public class UpdateTournamentRequestDto {
+    @jakarta.validation.constraints.Size(min = 4, message = "Tên giải đấu phải có ít nhất 4 ký tự")
     private String name;
+    @jakarta.validation.constraints.Size(min = 4, message = "Địa điểm phải có ít nhất 4 ký tự")
     private String location;
     private LocalDate startDate;
     private LocalDate endDate;

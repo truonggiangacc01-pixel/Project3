@@ -63,6 +63,37 @@ public class RaceUseCaseService {
     @Autowired
     private PredictionService predictionService;
 
+    public RaceSchedule assignRefereeToRace(Integer raceId, Integer refereeId) {
+        RaceSchedule race = findRace(raceId);
+        if (race.getStatus() == RaceScheduleStatus.COMPLETED || race.getStatus() == RaceScheduleStatus.RUNNING) {
+            throw new RuntimeException("Cannot assign referee to a race that has already started or completed.");
+        }
+        if (refereeId == null) {
+            race.setRaceReferee(null);
+            return raceScheduleRepo.save(race);
+        }
+        RaceReferee referee = raceRefereeRepo.findById(refereeId)
+                .orElseThrow(() -> new RuntimeException("Race Referee not found"));
+
+        if (race.getStartTime() != null && race.getEndTime() != null) {
+            // Check for conflict
+            List<RaceSchedule> allAssignedRaces = raceScheduleRepo.findByRaceReferee(referee);
+            for (RaceSchedule assignedRace : allAssignedRaces) {
+                if (assignedRace.getId().equals(raceId)) continue;
+                if (assignedRace.getStartTime() != null && assignedRace.getEndTime() != null) {
+                    boolean overlap = assignedRace.getStartTime().isBefore(race.getEndTime()) &&
+                            assignedRace.getEndTime().isAfter(race.getStartTime());
+                    if (overlap) {
+                        throw new RuntimeException("Trọng tài đã được phân công cho cuộc đua khác (" +
+                                assignedRace.getName() + ") trong cùng khung giờ.");
+                    }
+                }
+            }
+        }
+        race.setRaceReferee(referee);
+        return raceScheduleRepo.save(race);
+    }
+
     public RaceSchedule delayRace(Integer raceId, DelayRaceRequest request) {
         RaceSchedule race = findRace(raceId);
         if (race.getStatus() == RaceScheduleStatus.RUNNING || race.getStatus() == RaceScheduleStatus.ONGOING
@@ -100,6 +131,17 @@ public class RaceUseCaseService {
                 .orElseThrow(() -> new RuntimeException("Race track not found"));
         applyRaceTrack(track, request);
         return raceTrackRepo.save(track);
+    }
+
+    public void deleteRaceTrack(Integer trackId) {
+        RaceTrack track = raceTrackRepo.findById(trackId)
+                .orElseThrow(() -> new RuntimeException("Race track not found"));
+        
+        if (raceScheduleRepo.existsByRaceTrackId(trackId)) {
+            throw new RuntimeException("Cannot delete race track because it is being used in race schedules");
+        }
+        
+        raceTrackRepo.delete(track);
     }
 
     public List<RaceTrack> getRaceTracks() {
@@ -515,8 +557,11 @@ public class RaceUseCaseService {
     }
 
     private void validateRaceTrack(RaceTrackRequest request) {
-        if (isBlank(request.name()) || isBlank(request.location())) {
-            throw new RuntimeException("Race track name and location are required");
+        if (isBlank(request.name()) || request.name().trim().length() < 4) {
+            throw new RuntimeException("Tên trường đua phải có ít nhất 4 ký tự");
+        }
+        if (isBlank(request.location()) || request.location().trim().length() < 4) {
+            throw new RuntimeException("Địa điểm phải có ít nhất 4 ký tự");
         }
         if (request.lengthMeters() == null || request.lengthMeters() < 1000) {
             throw new RuntimeException("Chiều dài đường đua tối thiểu là 1000m");
@@ -637,5 +682,29 @@ public class RaceUseCaseService {
 
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
+    }
+
+    public List<Map<String, Object>> getRaceParticipations(Integer raceId) {
+        findRace(raceId);
+        List<RaceParticipation> participations = raceParticipationRepo.findByRaceScheduleId(raceId);
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (RaceParticipation p : participations) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", p.getId());
+            map.put("status", p.getStatus() != null ? p.getStatus().name() : null);
+            map.put("horseReady", p.getHorseReady());
+            map.put("jockeyReady", p.getJockeyReady());
+            map.put("inspectionNote", p.getInspectionNote());
+            if (p.getHorse() != null) {
+                map.put("horseId", p.getHorse().getId());
+                map.put("horseName", p.getHorse().getName());
+            }
+            if (p.getJockey() != null) {
+                map.put("jockeyId", p.getJockey().getId());
+                map.put("jockeyName", p.getJockey().getFullName());
+            }
+            result.add(map);
+        }
+        return result;
     }
 }

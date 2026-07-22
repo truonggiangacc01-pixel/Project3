@@ -14,11 +14,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/owner/race-participations")
 @CrossOrigin(origins = "*")
-@Tag(name = "API Race Participation for Owner")
+@Tag(name = "API Race Participation for Owner Kiểm thử thành công")
 public class RaceParticipationController {
 
     @Autowired
     private RaceParticipationService raceParticipationService;
+
+    @GetMapping
+    public ResponseEntity<?> getMyParticipations(Authentication authentication) {
+        try {
+            String email = authentication.getName();
+            return new ResponseEntity<>(raceParticipationService.getParticipationsByOwner(email), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @PostMapping("/register-horse")
     public ResponseEntity<?> registerHorse(@RequestBody RegisterHorseRequest request, Authentication authentication) {

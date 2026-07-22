@@ -19,7 +19,7 @@ public class UserAccountResponse {
 
     public UserAccountResponse() {}
 
-    public UserAccountResponse(Integer id, String fullName, String userName, String email, String phone, UserRole role, String status, LocalDate birthDate) {
+    public UserAccountResponse(Integer id, String fullName, String userName, String email, String phone, UserRole role, String status, LocalDate birthDate, String address, Integer experienceYears, String licenseNumber, String certificateLevel) {
         this.id = id;
         this.fullName = fullName;
         this.userName = userName;
@@ -28,6 +28,10 @@ public class UserAccountResponse {
         this.role = role;
         this.status = status;
         this.birthDate = birthDate;
+        this.address = address;
+        this.experienceYears = experienceYears;
+        this.licenseNumber = licenseNumber;
+        this.certificateLevel = certificateLevel;
     }
 
     public UserAccountResponse(Integer id, String fullName, String userName, String email, String phone, UserRole role, String status, LocalDate birthDate,
