@@ -42,6 +42,9 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/v3/api-docs",
                                 "/v3/api-docs/**").permitAll()
+                        .requestMatchers(
+                                "/api/tournaments/*/rankings",
+                                "/api/tournaments/*/rankings/jockeys").permitAll()
                         .requestMatchers("/api/admin/accounts", "/api/admin/accounts/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/owner/**").hasAuthority("ROLE_HORSE_OWNER")
                         .anyRequest().authenticated()
