@@ -34,6 +34,15 @@ public class UserAccountResponse {
         this.certificateLevel = certificateLevel;
     }
 
+    public UserAccountResponse(Integer id, String fullName, String userName, String email, String phone, UserRole role, String status, LocalDate birthDate,
+                               String address, Integer experienceYears, String licenseNumber, String certificateLevel) {
+        this(id, fullName, userName, email, phone, role, status, birthDate);
+        this.address = address;
+        this.experienceYears = experienceYears;
+        this.licenseNumber = licenseNumber;
+        this.certificateLevel = certificateLevel;
+    }
+
     public Integer getId() {
         return id;
     }

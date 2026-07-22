@@ -108,6 +108,39 @@ public class PredictionService {
     }
 
     @Transactional
+    public Prediction cancelPrediction(Integer predictionId, Integer spectatorId) {
+        if (predictionId == null || spectatorId == null) {
+            throw new RuntimeException("predictionId and spectatorId are required");
+        }
+
+        Prediction prediction = predictionRepo.findById(predictionId)
+                .orElseThrow(() -> new RuntimeException("Prediction not found"));
+        if (prediction.getSpectator() == null || !prediction.getSpectator().getId().equals(spectatorId)) {
+            throw new RuntimeException("Prediction does not belong to this spectator");
+        }
+        if (prediction.getStatus() != PredictionStatus.OPEN && prediction.getStatus() != PredictionStatus.PENDING) {
+            throw new RuntimeException("Only OPEN or PENDING predictions can be cancelled");
+        }
+
+        RaceSchedule race = prediction.getRaceSchedule();
+        if (race == null) {
+            throw new RuntimeException("Race schedule not found");
+        }
+        if (race.getStatus() == RaceScheduleStatus.RUNNING || race.getStatus() == RaceScheduleStatus.ONGOING
+                || race.getStatus() == RaceScheduleStatus.COMPLETED || race.getStatus() == RaceScheduleStatus.CANCELLED) {
+            throw new RuntimeException("Prediction cannot be cancelled after race starts or is cancelled");
+        }
+        if (race.getStartTime() != null && !race.getStartTime().isAfter(LocalDateTime.now().plusMinutes(15))) {
+            throw new RuntimeException("Prediction cancellation gate is already closed");
+        }
+
+        prediction.setStatus(PredictionStatus.REFUNDED);
+        prediction.setPayoutAmount(prediction.getStakeAmount());
+        walletService.refundPredictionStake(prediction.getSpectator(), prediction.getStakeAmount());
+        return predictionRepo.save(prediction);
+    }
+
+    @Transactional
     public int settleRacePredictions(Integer raceId) {
         List<RaceResult> publishedResults = raceResultRepo.findByRaceScheduleId(raceId).stream()
                 .filter(r -> r.getStatus() == RaceResultStatus.PUBLISHED || r.getStatus() == RaceResultStatus.OFFICIAL)
@@ -121,7 +154,11 @@ public class PredictionService {
                 .orElseThrow(() -> new RuntimeException("Winner result is missing"));
         Integer winningHorseId = winner.getRaceParticipation().getHorse().getId();
 
-        List<Prediction> predictions = predictionRepo.findByRaceScheduleId(raceId);
+        List<Prediction> predictions = predictionRepo.findByRaceScheduleId(raceId).stream()
+                .filter(prediction -> prediction.getStatus() == PredictionStatus.OPEN
+                        || prediction.getStatus() == PredictionStatus.PENDING
+                        || prediction.getStatus() == PredictionStatus.CLOSED)
+                .toList();
         BigDecimal totalStake = predictions.stream()
                 .map(Prediction::getStakeAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

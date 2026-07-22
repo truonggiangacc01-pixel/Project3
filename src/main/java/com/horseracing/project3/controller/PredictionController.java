@@ -1,5 +1,6 @@
 package com.horseracing.project3.controller;
 
+import com.horseracing.project3.dto.request.CancelPredictionRequest;
 import com.horseracing.project3.dto.request.PredictionRequest;
 import com.horseracing.project3.dto.response.ApiResponse;
 import com.horseracing.project3.dto.response.PredictionResponse;
@@ -35,6 +36,20 @@ public class PredictionController {
         try {
             return ResponseEntity.ok(new ApiResponse<>(true, "Prediction history loaded",
                     predictionService.getPredictionHistory(spectatorId).stream().map(PredictionResponse::from).toList()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
+    }
+
+    @PostMapping("/{predictionId}/cancel")
+    @PreAuthorize("hasAnyAuthority('ROLE_SPECTATOR','ROLE_ADMIN')")
+    public ResponseEntity<?> cancelPrediction(
+            @PathVariable Integer predictionId,
+            @RequestBody CancelPredictionRequest request) {
+        try {
+            Integer spectatorId = request == null ? null : request.getSpectatorId();
+            return ResponseEntity.ok(new ApiResponse<>(true, "Prediction cancelled and refunded",
+                    PredictionResponse.from(predictionService.cancelPrediction(predictionId, spectatorId))));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
         }

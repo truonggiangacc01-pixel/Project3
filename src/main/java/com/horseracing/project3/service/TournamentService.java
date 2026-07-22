@@ -66,6 +66,7 @@ public class TournamentService {
         tournament.setLocation(requestDto.getLocation());
         tournament.setStartDate(requestDto.getStartDate());
         tournament.setEndDate(requestDto.getEndDate());
+        tournament.setStatus(TournamentStatus.ACTIVE);
         tournament.setAdmin(admin);
 
         // Save entity
@@ -77,7 +78,9 @@ public class TournamentService {
                 savedTournament.getName(),
                 savedTournament.getLocation(),
                 savedTournament.getStartDate(),
-                savedTournament.getEndDate()
+                savedTournament.getEndDate(),
+                savedTournament.getStatus() != null ? savedTournament.getStatus().name() : "DRAFT",
+                savedTournament.getRaceScheduleList() != null ? savedTournament.getRaceScheduleList().size() : 0
         );
         responseDto.setStatus(savedTournament.getStatus() != null ? savedTournament.getStatus().name() : null);
         responseDto.setRacesCount((savedTournament.getRaceScheduleList() != null) ? savedTournament.getRaceScheduleList().size() : 0);
@@ -143,7 +146,9 @@ public class TournamentService {
                 savedTournament.getName(),
                 savedTournament.getLocation(),
                 savedTournament.getStartDate(),
-                savedTournament.getEndDate()
+                savedTournament.getEndDate(),
+                savedTournament.getStatus() != null ? savedTournament.getStatus().name() : "DRAFT",
+                savedTournament.getRaceScheduleList() != null ? savedTournament.getRaceScheduleList().size() : 0
         );
         responseDto.setStatus(savedTournament.getStatus() != null ? savedTournament.getStatus().name() : null);
         responseDto.setRacesCount((savedTournament.getRaceScheduleList() != null) ? savedTournament.getRaceScheduleList().size() : 0);

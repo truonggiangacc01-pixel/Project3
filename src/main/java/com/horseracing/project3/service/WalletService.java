@@ -76,6 +76,14 @@ public class WalletService {
         saveTransaction(spectator, amount, PaymentGateway.MOMO, TransactionStatus.SUCCESS, TransactionType.PREDICTION_PAYOUT);
     }
 
+    @Transactional
+    public void refundPredictionStake(Spectator spectator, BigDecimal amount) {
+        validateAmount(amount);
+        spectator.setWalletBalance(spectator.getWalletBalance().add(amount));
+        spectatorRepo.save(spectator);
+        saveTransaction(spectator, amount, PaymentGateway.MOMO, TransactionStatus.SUCCESS, TransactionType.REFUND);
+    }
+
     private Spectator findSpectator(Integer spectatorId) {
         return spectatorRepo.findById(spectatorId)
                 .orElseThrow(() -> new RuntimeException("Spectator not found"));

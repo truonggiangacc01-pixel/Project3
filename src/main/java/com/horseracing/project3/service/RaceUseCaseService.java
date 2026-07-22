@@ -157,9 +157,12 @@ public class RaceUseCaseService {
             return Map.of("raceId", raceId, "reopened", false, "message", "Prediction remains closed");
         }
         List<Prediction> predictions = predictionRepo.findByRaceScheduleId(raceId);
-        predictions.forEach(prediction -> prediction.setStatus(PredictionStatus.OPEN));
-        predictionRepo.saveAll(predictions);
-        return Map.of("raceId", raceId, "reopened", true, "updatedPredictions", predictions.size());
+        List<Prediction> reopenedPredictions = predictions.stream()
+                .filter(prediction -> prediction.getStatus() == PredictionStatus.CLOSED)
+                .toList();
+        reopenedPredictions.forEach(prediction -> prediction.setStatus(PredictionStatus.OPEN));
+        predictionRepo.saveAll(reopenedPredictions);
+        return Map.of("raceId", raceId, "reopened", true, "updatedPredictions", reopenedPredictions.size());
     }
 
     public Map<String, Object> closeDuePredictions() {
